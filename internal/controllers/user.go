@@ -3,7 +3,9 @@ package controllers
 import (
 	"net/http"
 	"regexp"
+	"shopping/internal/middleware"
 	"shopping/internal/services"
+	"shopping/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,23 +30,29 @@ func NewUserController(UserService *services.UserService) *UserController {
 	return &UserController{UserService: UserService}
 }
 
+type LoginRequest struct {
+	Username string `json:"userName" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 func (l *UserController) Login(c *gin.Context) {
-	// 1. 获取参数
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	// 2. 验证参数
-	if username == "" || password == "" {
-		c.JSON(400, gin.H{
-			"code":    400,
-			"message": "用户名或密码不能为空",
-		})
+
+	var data LoginRequest
+	// 绑定 JSON 数据到结构体
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// 3. 返回结果
-	c.JSON(200, gin.H{
-		"code":    200,
-		"message": "登录成功",
-	})
+	// TODO 2.需要查询数据库
+	// TODO 3. 返回结果 （默认先返回随机的）
+	jwt, err := middleware.GenToken(data.Username)
+	if err != nil {
+		c.JSON(200, utils.Error(500, "生成token失败"))
+		return
+	}
+	c.JSON(200, utils.Success(gin.H{
+		"token": jwt,
+	}, "登录成功"))
 
 }
 

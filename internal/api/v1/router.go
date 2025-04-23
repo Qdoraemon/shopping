@@ -2,6 +2,7 @@ package v1
 
 import (
 	"shopping/internal/controllers"
+	"shopping/internal/middleware"
 	"shopping/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -9,15 +10,13 @@ import (
 )
 
 func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
-	user := r.Group("/")
-	// r.POST("login/", base.Login)
-	// r.POST("register/", base.Register)
-	// r.GET("products/", base.GetProducts)
-	// // 新增公司详情展示路由
-	// r.GET("company/", base.GetCompanyInfo)
+	base := r.Group("/v1/admins")
 
-	user.POST("login/", controllers.NewUserController(services.NewUserService(engine)).Login)
-	user.POST("register/", controllers.NewUserController(services.NewUserService(engine)).Register)
-	
+	base.POST("/login", controllers.NewUserController(services.NewUserService(engine)).Login)
+	base.POST("/register", controllers.NewUserController(services.NewUserService(engine)).Register)
+
+	basicInformation := r.Group("/v1/basicInformation")
+	basicInformation.Use(middleware.JWTAuthMiddleware())
+	basicInformation.GET("/getAllBasicInformation", controllers.NewBaseInfoController(services.NewBaseInfoService(engine)).GetAllBasicInformation)
 
 }
