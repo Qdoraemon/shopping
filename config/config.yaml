@@ -1,0 +1,5 @@
+# 基础配置
+app:
+  port: 8080
+database:
+  source: root:123456@tcp(localhost:3306)/shopping?charset=utf8mb4&parseTime=True&loc=Local
