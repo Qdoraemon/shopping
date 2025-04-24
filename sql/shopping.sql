@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 25/04/2025 00:31:18
+ Date: 25/04/2025 01:02:54
 */
 
 SET NAMES utf8mb4;
@@ -29,8 +29,8 @@ CREATE TABLE `base_information`  (
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '邮箱地址',
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '地址',
   `wechat_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信图片地址',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否刪除',
-  `is_enable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否启用',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+  `is_enable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否启用 0：未启用 1：启用',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
@@ -38,6 +38,28 @@ CREATE TABLE `base_information`  (
 -- Records of base_information
 -- ----------------------------
 INSERT INTO `base_information` VALUES (1, '測試用戶', NULL, '1234567890', '123@test.com', '測試地址', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 0, 0);
+
+-- ----------------------------
+-- Table structure for carousel
+-- ----------------------------
+DROP TABLE IF EXISTS `carousel`;
+CREATE TABLE `carousel`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `order` int NOT NULL DEFAULT 0 COMMENT '排序',
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '图片URL地址',
+  `redirect_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '图片URL地址',
+  `is_enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否启用 0：未启用 1：启用',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of carousel
+-- ----------------------------
+INSERT INTO `carousel` VALUES (1, '測試', 1, 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 0, 1, '2025-04-25 00:51:09', '2025-04-25 00:51:13');
 
 -- ----------------------------
 -- Table structure for user

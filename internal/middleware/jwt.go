@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -66,7 +65,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			c.Abort()
 			return
 		}
-		fmt.Println(authHeader)
+
 		// 按空格分割
 
 		parts := strings.SplitN(authHeader, " ", 2)
@@ -79,7 +78,6 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 
 		}
-		fmt.Println(parts[1])
 
 		mc, err := ParseToken(parts[1])
 		if err != nil {
@@ -91,7 +89,6 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 		}
 
-		fmt.Println(mc)
 		// 将当前请求的username信息保存到请求的上下文c上
 		c.Set("username", mc.Username)
 		c.Set("userId", mc.UserId)
