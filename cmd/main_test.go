@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"shopping/internal/middleware"
+	"shopping/internal/utils"
 	"sync"
 	"testing"
 	"time"
@@ -31,6 +32,9 @@ func TestLoginHandler(t *testing.T) {
 	r := setupRouter()
 	var s sync.WaitGroup
 	number := 20
+	ss, _ := utils.HashPass("123456")
+	t.Log(ss)
+	t.Log("sdsd")
 	s.Add(number)
 	for i := 0; i < number; i++ {
 		if i%10 == 0 {

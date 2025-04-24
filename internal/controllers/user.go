@@ -43,9 +43,15 @@ func (l *UserController) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// TODO 2.需要查询数据库
+	//  2.需要查询数据库
+	// TODO 修改规定提示码
+	user, err := l.UserService.LoginUser(data.Username, data.Password)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "用户名或密码错误"))
+		return
+	}
 	// TODO 3. 返回结果 （默认先返回随机的）
-	jwt, err := middleware.GenToken(data.Username)
+	jwt, err := middleware.GenToken(user.Username)
 	if err != nil {
 		c.JSON(200, utils.Error(500, "生成token失败"))
 		return
@@ -56,7 +62,7 @@ func (l *UserController) Login(c *gin.Context) {
 
 }
 
-// Register 处理用户注册请求
+// TODO Register 处理用户注册请求 (未完成和未测试)
 func (l *UserController) Register(c *gin.Context) {
 	// 1. 获取参数
 	username := c.PostForm("username")
