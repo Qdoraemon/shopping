@@ -8,13 +8,13 @@ import (
 )
 
 type BaseInfoService struct {
-	baseInfoRepo *repositories.UserRepository
+	baseInfoRepo *repositories.BaseInfoRepository
 }
 
 func NewBaseInfoService(engine *gorm.DB) *BaseInfoService {
-	return &BaseInfoService{baseInfoRepo: repositories.NewUserRepository(engine)}
+	return &BaseInfoService{baseInfoRepo: repositories.NewBaseInfoRepository(engine)}
 }
 
-func (us *BaseInfoService) GetUsers() ([]*models.User, error) {
-	return us.baseInfoRepo.GetUsers()
+func (us *BaseInfoService) GetAllBasicInformation() ([]*models.BaseInformation, error) {
+	return us.baseInfoRepo.GetAllBasicInformations()
 }

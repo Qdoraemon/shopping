@@ -24,9 +24,12 @@ func (l *BaseInfoController) GetAllBasicInformation(c *gin.Context) {
 	fmt.Println("userId:", userId)
 	fmt.Println("username:", username)
 	fmt.Println("1111")
+	result, err := l.BaseInfoService.GetAllBasicInformation()
+	if err != nil {
+		c.JSON(200, utils.Error(400, "获取失败"))
+		return
+	}
 	// 3. 返回结果
-	c.JSON(200, utils.Success(gin.H{
-		"token": "123456",
-	}, "登录成功"))
+	c.JSON(200, utils.Success(result, "登录成功"))
 
 }

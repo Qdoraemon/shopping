@@ -15,8 +15,8 @@ func NewBaseInfoRepository(engine *gorm.DB) *BaseInfoRepository {
 }
 
 // TODO 测试用例
-func (r *BaseInfoRepository) GetUsers() ([]*models.User, error) {
-	var users []*models.User
-	err := r.engine.Table(models.User{}.TableName()).Find(&users).Error
+func (r *BaseInfoRepository) GetAllBasicInformations() ([]*models.BaseInformation, error) {
+	var users []*models.BaseInformation
+	err := r.engine.Table(models.BaseInformation{}.TableName()).Find(&users).Error
 	return users, err
 }
