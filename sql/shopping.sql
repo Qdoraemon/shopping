@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 25/04/2025 01:02:54
+ Date: 25/04/2025 01:56:06
 */
 
 SET NAMES utf8mb4;
@@ -60,6 +60,33 @@ CREATE TABLE `carousel`  (
 -- Records of carousel
 -- ----------------------------
 INSERT INTO `carousel` VALUES (1, '測試', 1, 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 0, 1, '2025-04-25 00:51:09', '2025-04-25 00:51:13');
+
+-- ----------------------------
+-- Table structure for product
+-- ----------------------------
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品名称',
+  `cover_image` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品封面图',
+  `detail_images` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品详情图片',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品描述',
+  `sale_price` float(10, 2) NOT NULL DEFAULT 0.00 COMMENT '销售价格',
+  `cost_price` float(10, 2) NOT NULL DEFAULT 0.00 COMMENT '成本价格',
+  `stock_quantity` int NOT NULL DEFAULT 0 COMMENT '库存数量',
+  `brand` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品品牌',
+  `category_id` int NOT NULL DEFAULT 0 COMMENT '商品分类ID',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `is_available` tinyint(1) NOT NULL DEFAULT 1 COMMENT '上下架状态 0:下架 1:上架',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of product
+-- ----------------------------
+INSERT INTO `product` VALUES (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', NULL, 'ipad 10 商品', 1000.00, 500.00, 0, 'Apple', 0, '2025-04-25 01:34:05', '2025-04-25 01:34:08', 1, 1);
 
 -- ----------------------------
 -- Table structure for user
