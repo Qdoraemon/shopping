@@ -1,22 +1,46 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"shopping/internal/services"
+	"shopping/internal/utils"
+	"strconv"
 
-// Product 定义商品结构体
-type Product struct {
-	ID    int     `json:"id"`
-	Name  string  `json:"name"`
-	Price float64 `json:"price"`
-	Desc  string  `json:"desc"`
+	"github.com/gin-gonic/gin"
+)
+
+type ProductController struct {
+	ProductService *services.ProductService
 }
 
-// 模拟商品数据
-var Products = []Product{
-	{ID: 1, Name: "苹果", Price: 5.99, Desc: "新鲜的苹果"},
-	{ID: 2, Name: "香蕉", Price: 3.99, Desc: "香甜的香蕉"},
+func NewProductController(ProductService *services.ProductService) *ProductController {
+	return &ProductController{ProductService: ProductService}
 }
 
-// GetProducts 处理商品展示请求
-func GetProducts(c *gin.Context) {
-	c.JSON(200, Products)
+func (l *ProductController) GetAllProducts(c *gin.Context) {
+
+	result, err := l.ProductService.GetAllProducts()
+	if err != nil {
+		c.JSON(200, utils.Error(400, "获取失败"))
+		return
+	}
+	// 3. 返回结果
+	c.JSON(200, utils.Success(result, "登录成功"))
+
+}
+
+func (l *ProductController) GetProductById(c *gin.Context) {
+	id := c.Param("id")
+	idNum, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "id传入错误"))
+		return
+	}
+	result, err := l.ProductService.GetProductById(idNum)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "获取失败"))
+		return
+	}
+	// 3. 返回结果
+	c.JSON(200, utils.Success(result, "登录成功"))
+
 }

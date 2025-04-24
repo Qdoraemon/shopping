@@ -25,4 +25,8 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	carousels := r.Group("/v1/carousels")
 	carousels.GET("/getAllCarousels", controllers.NewCarouselsController(services.NewCarouselsService(engine)).GetAllCarousels)
 
+	products := r.Group("/v1/products")
+	products.GET("/getAllProducts", controllers.NewProductController(services.NewProductsService(engine)).GetAllProducts)
+	products.GET("/getProductById/:id", controllers.NewProductController(services.NewProductsService(engine)).GetProductById)
+
 }
