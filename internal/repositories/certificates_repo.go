@@ -24,3 +24,8 @@ func (r *CertificatesRepository) GetCertificatesByPage(page, pageSize int) ([]*m
 		Find(&certificates).Error
 	return certificates, err
 }
+
+func (r *CertificatesRepository) AddCertificate(certificate *models.Certificates) error {
+	err := r.engine.Table(models.Certificates{}.TableName()).Create(certificate).Error
+	return err
+}

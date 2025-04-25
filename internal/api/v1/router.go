@@ -35,6 +35,8 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	certificates := r.Group("/v1/certificates")
 	certificatesController := controllers.NewCertificatesController(services.NewCertificatesService(engine))
 	certificates.GET("/page", certificatesController.GetCertificatesByPage)
+	// 注册添加证书路由
+	certificates.POST("/addCertificate", certificatesController.AddCertificate)
 
 	// TODO 文件上传 需要有一个专门的接口来处理文件上传
 	fileUpload := r.Group("/v1/fileUpload")

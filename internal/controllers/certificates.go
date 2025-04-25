@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"shopping/internal/models"
 	"shopping/internal/services"
 	"shopping/internal/utils"
 	"strconv"
@@ -99,4 +100,22 @@ func (l *CertificatesController) GetImage(c *gin.Context) {
 	// 设置响应头
 	c.Header("Content-Type", "image/jpeg") // 根据实际情况修改图片类型
 	c.Data(200, "image/jpeg", fileContent)
+}
+
+// AddCertificate 处理添加证书请求
+func (l *CertificatesController) AddCertificate(c *gin.Context) {
+	var certificate models.Certificates
+	// 绑定请求数据到 certificate 结构体
+	if err := c.ShouldBindJSON(&certificate); err != nil {
+		c.JSON(200, utils.Error(400, "请求数据解析失败"))
+		return
+	}
+
+	// 调用服务层方法添加证书
+	if err := l.CertificatesService.AddCertificate(&certificate); err != nil {
+		c.JSON(200, utils.Error(400, "添加证书失败"))
+		return
+	}
+
+	c.JSON(200, utils.Success(nil, "证书添加成功"))
 }
