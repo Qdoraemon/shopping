@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 25/04/2025 13:47:34
+ Date: 25/04/2025 18:30:32
 */
 
 SET NAMES utf8mb4;
@@ -60,6 +60,27 @@ CREATE TABLE `carousel`  (
 -- Records of carousel
 -- ----------------------------
 INSERT INTO `carousel` VALUES (1, '測試', 1, 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 0, 1, '2025-04-25 00:51:09', '2025-04-25 00:51:13');
+
+-- ----------------------------
+-- Table structure for certificates
+-- ----------------------------
+DROP TABLE IF EXISTS `certificates`;
+CREATE TABLE `certificates`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '证书名称',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '证书描述',
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '证书图片',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+  `is_available` tinyint(1) NOT NULL DEFAULT 1 COMMENT '上下架状态 0:下架 1:上架',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of certificates
+-- ----------------------------
+INSERT INTO `certificates` VALUES (1, '证书测试', NULL, 'https://th.bing.com/th/id/R.6be254f5a9c41896c79382094e4230b5?rik=zjgITyanlsoKQw&riu=http%3a%2f%2fwww.ahhxpg.cn%2fUploads%2fimage%2f20220218%2f1645165500965676.jpg&ehk=VumOLWb6sLbmHJjolHei2sJgxHI8K3li0bYWbt3haSw%3d&risl=&pid=ImgRaw&r=0', 1, 1, '2025-04-25 18:16:18', '2025-04-25 18:16:21');
 
 -- ----------------------------
 -- Table structure for product

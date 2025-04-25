@@ -12,10 +12,10 @@ import (
 
 func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	r.Use(middleware.RateLimitMiddleware(time.Second, 100, 100))
-	base := r.Group("/v1/admins")
+	base := r.Group("/v1")
 
-	base.POST("/login", controllers.NewUserController(services.NewUserService(engine)).Login)
-	base.POST("/register", controllers.NewUserController(services.NewUserService(engine)).Register)
+	base.POST("/admins/login", controllers.NewUserController(services.NewUserService(engine)).Login)
+	base.POST("/admins/register", controllers.NewUserController(services.NewUserService(engine)).Register)
 
 	r.Use(middleware.JWTAuthMiddleware()) // 验证token ,从这里往下都需要验证token
 
@@ -35,4 +35,10 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	certificates := r.Group("/v1/certificates")
 	certificatesController := controllers.NewCertificatesController(services.NewCertificatesService(engine))
 	certificates.GET("/page", certificatesController.GetCertificatesByPage)
+
+	// TODO 文件上传 需要有一个专门的接口来处理文件上传
+	fileUpload := r.Group("/v1/fileUpload")
+	fileUpload.POST("/upload", certificatesController.UploadImage)
+
+	base.GET("/getLatestImage", certificatesController.GetImage)
 }
