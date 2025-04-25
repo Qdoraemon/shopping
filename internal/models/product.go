@@ -19,6 +19,7 @@ type Product struct {
 	CreateTime    time.Time `gorm:"column:create_time;type:datetime;not null;comment:创建时间" json:"createTime"`
 	IsAvailable   bool      `gorm:"column:is_available;type:tinyint(1);not null;default:1;comment:上下架状态 0:下架 1:上架" json:"isAvailable"`
 	IsDeleted     bool      `gorm:"column:is_deleted;type:tinyint(1);not null;default:1;comment:是否删除 0：删除 1：正常" json:"isDeleted"`
+	Type          int       `gorm:"not null;default:0;comment:默认类型：0" json:"type"`
 }
 
 func (Product) TableName() string {

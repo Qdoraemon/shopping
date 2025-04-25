@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 25/04/2025 01:56:06
+ Date: 25/04/2025 13:47:34
 */
 
 SET NAMES utf8mb4;
@@ -80,13 +80,14 @@ CREATE TABLE `product`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `is_available` tinyint(1) NOT NULL DEFAULT 1 COMMENT '上下架状态 0:下架 1:上架',
   `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+  `type` int NOT NULL DEFAULT 0 COMMENT '默认类型：0',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product` VALUES (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', NULL, 'ipad 10 商品', 1000.00, 500.00, 0, 'Apple', 0, '2025-04-25 01:34:05', '2025-04-25 01:34:08', 1, 1);
+INSERT INTO `product` VALUES (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', NULL, 'ipad 10 商品', 1000.00, 500.00, 0, 'Apple', 0, '2025-04-25 01:34:05', '2025-04-25 01:34:08', 1, 1, 0);
 
 -- ----------------------------
 -- Table structure for user
@@ -95,7 +96,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '用户名',
+  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
   `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `create_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
