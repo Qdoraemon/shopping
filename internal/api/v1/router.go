@@ -13,6 +13,12 @@ import (
 func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	r.Use(middleware.RateLimitMiddleware(time.Second, 100, 100))
 	base := r.Group("/v1")
+	baseController := controllers.NewBaseController()
+	// TODO 文件上传 需要有一个专门的接口来处理文件上传
+	fileUpload := r.Group("/v1/fileUpload")
+	fileUpload.POST("/upload", baseController.UploadImage)
+
+	base.GET("/getLatestImage", baseController.GetImage)
 
 	base.POST("/admins/login", controllers.NewUserController(services.NewUserService(engine)).Login)
 	base.POST("/admins/register", controllers.NewUserController(services.NewUserService(engine)).Register)
@@ -37,10 +43,8 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	certificates.GET("/page", certificatesController.GetCertificatesByPage)
 	// 注册添加证书路由
 	certificates.POST("/addCertificate", certificatesController.AddCertificate)
+	certificates.PUT("/updateCertificate", certificatesController.UpdateCertificate)
+	// 注册删除证书路由
+	certificates.DELETE("/deleteCertificate/:id", certificatesController.DeleteCertificate)
 
-	// TODO 文件上传 需要有一个专门的接口来处理文件上传
-	fileUpload := r.Group("/v1/fileUpload")
-	fileUpload.POST("/upload", certificatesController.UploadImage)
-
-	base.GET("/getLatestImage", certificatesController.GetImage)
 }
