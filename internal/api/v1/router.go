@@ -20,13 +20,19 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	r.Use(middleware.JWTAuthMiddleware()) // 验证token ,从这里往下都需要验证token
 
 	basicInformation := r.Group("/v1/basicInformation")
-	basicInformation.GET("/getAllBasicInformation", controllers.NewBaseInfoController(services.NewBaseInfoService(engine)).GetAllBasicInformation)
+	basicInformationController := controllers.NewBaseInfoController(services.NewBaseInfoService(engine))
+	basicInformation.GET("/getAllBasicInformation", basicInformationController.GetAllBasicInformation)
 
 	carousels := r.Group("/v1/carousels")
-	carousels.GET("/getAllCarousels", controllers.NewCarouselsController(services.NewCarouselsService(engine)).GetAllCarousels)
+	carouselsController := controllers.NewCarouselsController(services.NewCarouselsService(engine))
+	carousels.GET("/getAllCarousels", carouselsController.GetAllCarousels)
 
 	products := r.Group("/v1/products")
-	products.GET("/getAllProducts", controllers.NewProductController(services.NewProductsService(engine)).GetAllProducts)
-	products.GET("/getProductById/:id", controllers.NewProductController(services.NewProductsService(engine)).GetProductById)
+	productController := controllers.NewProductController(services.NewProductsService(engine))
+	products.GET("/getAllProducts", productController.GetAllProducts)
+	products.GET("/getProductById/:id", productController.GetProductById)
 
+	certificates := r.Group("/v1/certificates")
+	certificatesController := controllers.NewCertificatesController(services.NewCertificatesService(engine))
+	certificates.GET("/page", certificatesController.GetCertificatesByPage)
 }
