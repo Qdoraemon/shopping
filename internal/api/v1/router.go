@@ -47,4 +47,13 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	// 注册删除证书路由
 	certificates.DELETE("/deleteCertificate/:id", certificatesController.DeleteCertificate)
 
+	brands := r.Group("/v1/brands")
+	brandsController := controllers.NewBrandsController(services.NewBrandsService(engine))
+	brands.GET("/", brandsController.GetBrandsByPage)
+	// 注册添加证书路由
+	brands.POST("/addBrand", brandsController.AddBrands)
+	brands.PUT("/updateBrand", brandsController.UpdateBrands)
+	// 注册删除证书路由
+	brands.DELETE("/deleteBrand/:id", brandsController.DeleteBrands)
+
 }

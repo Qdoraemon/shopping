@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 25/04/2025 21:03:43
+ Date: 25/04/2025 22:58:51
 */
 
 SET NAMES utf8mb4;
@@ -38,6 +38,29 @@ CREATE TABLE `base_information`  (
 -- Records of base_information
 -- ----------------------------
 INSERT INTO `base_information` VALUES (1, '測試用戶', NULL, '1234567890', '123@test.com', '測試地址', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 0, 0);
+
+-- ----------------------------
+-- Table structure for brands
+-- ----------------------------
+DROP TABLE IF EXISTS `brands`;
+CREATE TABLE `brands`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '品牌名称',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '品牌描述',
+  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '品牌logo',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+  `is_enabled` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否启用 0：未启用 1：启用',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of brands
+-- ----------------------------
+INSERT INTO `brands` VALUES (1, '商品', NULL, 'https://img.51miz.com/Element/00/81/29/18/21f4ca05_E812918_ede58726.png', '2025-04-25 22:54:03', '2025-04-25 22:54:06', 1, 1);
+INSERT INTO `brands` VALUES (2, '112', '321', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593018435231.jfif', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
+INSERT INTO `brands` VALUES (3, '1212', '1212', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593082398137.jfif', '2025-04-25 22:58:04', '2025-04-25 22:58:04', 1, 1);
 
 -- ----------------------------
 -- Table structure for carousel
@@ -80,8 +103,9 @@ CREATE TABLE `certificates`  (
 -- ----------------------------
 -- Records of certificates
 -- ----------------------------
-INSERT INTO `certificates` VALUES (1, '证书测试', '11', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745585749758469.jfif', 1, 1, '2025-04-25 18:16:18', '2025-04-25 20:55:51');
+INSERT INTO `certificates` VALUES (1, '证书测试', '11', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745585749758469.jfif', 0, 1, '2025-04-25 18:16:18', '2025-04-25 20:55:51');
 INSERT INTO `certificates` VALUES (2, '11', '333', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745578806650419.jfif', 1, 1, '2025-04-25 19:05:33', '2025-04-25 20:50:31');
+INSERT INTO `certificates` VALUES (3, '777', '889', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745586348882481.jfif', 1, 1, '2025-04-25 21:05:51', '2025-04-25 21:05:51');
 
 -- ----------------------------
 -- Table structure for product
@@ -127,7 +151,7 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `ones_username`(`username`) USING BTREE COMMENT '用户名唯一索引',
   UNIQUE INDEX `ones_email`(`email`) USING BTREE COMMENT '邮箱号唯一索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
