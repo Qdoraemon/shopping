@@ -32,8 +32,6 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	notAuthcarousels := r.Group("/v1/carousels")
 	notAuthcarousels.GET("/getAllCarousels", carouselsController.GetAllCarousels)
 
-	r.Use(middleware.JWTAuthMiddleware()) // 验证token ,从这里往下都需要验证token
-
 	basicInformation := r.Group("/v1/basicInformation")
 	basicInformation.GET("/getAllBasicInformation", basicInformationController.GetAllBasicInformation)
 
@@ -41,6 +39,8 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 
 	products.GET("/getAllProducts", productController.GetAllProducts)
 	products.GET("/getProductById/:id", productController.GetProductById)
+
+	r.Use(middleware.JWTAuthMiddleware()) // 验证token ,从这里往下都需要验证token
 
 	certificates := r.Group("/v1/certificates")
 	certificates.GET("/page", certificatesController.GetCertificatesByPage)
