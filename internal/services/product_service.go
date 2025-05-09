@@ -13,7 +13,7 @@ type option struct {
 	Values []string `json:"values"`
 }
 
-var TypeMap = map[int]string{
+var CategoryMap = map[int]string{
 	1: "平板",
 	2: "電腦",
 	3: "手機",
@@ -21,23 +21,24 @@ var TypeMap = map[int]string{
 }
 
 type Product struct {
-	ID            int64     `json:"id"`
-	Name          string    `json:"name"`
-	CoverImage    string    `json:"coverImage"`
-	DetailImages  []string  `json:"detailImages"`
-	Description   string    `json:"description"`
-	SalePrice     float64   `json:"salePrice"`
-	CostPrice     float64   `json:"costPrice"`
-	StockQuantity int       `json:"stockQuantity"`
-	Brand         *string   `json:"brand"`
-	Options       []option  `json:"options"`
-	CategoryID    int       `json:"categoryId"`
-	UpdateTime    time.Time `json:"updateTime"`
-	CreateTime    time.Time `json:"createTime"`
-	IsAvailable   bool      `json:"isAvailable"`
-	IsDeleted     bool      `json:"isDeleted"`
-	Type          string    `json:"type"`
-	Model         string    `json:"model"`
+	ID             int64                    `json:"id"`
+	Name           string                   `json:"name"`
+	CoverImage     string                   `json:"coverImage"`
+	DetailImages   []string                 `json:"detailImages"`
+	Description    string                   `json:"description"`
+	SalePrice      float64                  `json:"salePrice"`
+	CostPrice      float64                  `json:"costPrice"`
+	StockQuantity  int                      `json:"stockQuantity"`
+	Brand          *string                  `json:"brand"`
+	Options        []option                 `json:"options"`
+	Features       []string                 `json:"features"`
+	Category       string                   `json:"category"`
+	UpdateTime     time.Time                `json:"updateTime"`
+	CreateTime     time.Time                `json:"createTime"`
+	IsAvailable    bool                     `json:"isAvailable"`
+	IsDeleted      bool                     `json:"isDeleted"`
+	Type           int                      `json:"type"`
+	Specifications []map[string]interface{} `json:"specifications"`
 }
 
 type ProductService struct {
@@ -67,24 +68,26 @@ func (us *ProductService) GetProductById(id int) (*Product, error) {
 
 	// 创建新的 Product 结构体并赋值
 	newProduct := Product{
-		ID:            product.ID,
-		Name:          product.Name,
-		CoverImage:    product.CoverImage,
-		DetailImages:  product.DetailImages,
-		Description:   product.Description,
-		SalePrice:     product.SalePrice,
-		CostPrice:     product.CostPrice,
-		StockQuantity: product.StockQuantity,
-		Brand:         product.Brand,
-		Options:       options,
-		CategoryID:    product.CategoryID,
-		UpdateTime:    product.UpdateTime,
-		CreateTime:    product.CreateTime,
-		IsAvailable:   product.IsAvailable,
-		IsDeleted:     product.IsDeleted,
-		Type:          TypeMap[product.Type],
+		ID:             product.ID,
+		Name:           product.Name,
+		CoverImage:     product.CoverImage,
+		DetailImages:   product.DetailImages,
+		Description:    product.Description,
+		SalePrice:      product.SalePrice,
+		CostPrice:      product.CostPrice,
+		StockQuantity:  product.StockQuantity,
+		Brand:          product.Brand,
+		Options:        options,
+		Category:       CategoryMap[product.CategoryID],
+		Features:       product.Features,
+		UpdateTime:     product.UpdateTime,
+		CreateTime:     product.CreateTime,
+		IsAvailable:    product.IsAvailable,
+		IsDeleted:      product.IsDeleted,
+		Type:           product.Type,
+		Specifications: product.Specifications,
 	}
-
+	// fmt.Println("product:", newProduct.Specifications)
 	// return us.productRepo.GetProductById(id)
 	return &newProduct, nil
 }

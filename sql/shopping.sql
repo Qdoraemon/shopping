@@ -123,6 +123,7 @@ CREATE TABLE `product`  (
   `brand` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品品牌',
   `color` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '颜色',
   `storage` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '存储',
+  `features` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品特點',
   `category_id` int NOT NULL DEFAULT 0 COMMENT '商品分类ID',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -132,12 +133,44 @@ CREATE TABLE `product`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+
+DROP TABLE IF EXISTS `specifications`;
+CREATE TABLE `specifications` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `product_id` BIGINT NOT NULL COMMENT '商品ID',
+    `category` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类别',
+    `name` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+    `value` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '值',
+    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
 -- ----------------------------
 -- Records of product
 -- ----------------------------
 INSERT INTO `product` VALUES (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 
                       'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg'
-                      , 'ipad 10 商品', 1000.00, 500.00, 0, 'Apple', '藍色,黑色,粉色,黃色','64GB,128GB', 0, '2025-04-25 01:34:05', '2025-04-25 01:34:08', 1, 1, 1);
+                      , 'ipad 10 商品', 1000.00, 500.00, 0, 'Apple', '藍色,黑色,粉色,黃色','64GB,128GB', 
+                      '10.9英寸Liquid Retina顯示屏,A14仿生晶片,支持Apple Pencil（第1代）,支持Magic Keyboard Folio,1200萬像素後置攝像頭,USB-C接口,支持Wi-Fi 6,長達10小時的電池續航'
+                      ,1, '2025-04-25 01:34:05', '2025-04-25 01:34:08', 1, 1, 1);
+
+
+INSERT INTO `specifications` (`product_id`, `category`, `name`, `value`) VALUES
+(1, '基本規格', '顯示屏', '10.9英寸Liquid Retina顯示屏'),
+(1, '基本規格', '晶片', 'A14仿生晶片'),
+(1, '基本規格', '接口', 'USB-C'),
+(1, '基本規格', '無線', '支持Wi-Fi 6'),
+(1, '相機', '後置攝像頭', '1200萬像素'),
+(1, '相機', '前置攝像頭', '700萬像素'),
+(1, '電池', '續航時間', '長達10小時'),
+(1, '兼容性', 'Apple Pencil', '支持（第1代）'),
+(1, '兼容性', '鍵盤', '支持Magic Keyboard Folio'),
+(1, '音頻', '揚聲器', '立體聲揚聲器'),
+(1, '音頻', '麥克風', '雙麥克風'),
+(1, '操作系統', '系統', 'iPadOS 15'),
+(1, '尺寸', '高度', '247.6毫米'),
+(1, '尺寸', '寬度', '178.5毫米'),
+(1, '尺寸', '厚度', '6.1毫米'),
+(1, '重量', '重量', '460克');
 
 -- ----------------------------
 -- Table structure for user
