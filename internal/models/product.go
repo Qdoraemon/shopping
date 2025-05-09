@@ -41,6 +41,8 @@ type Product struct {
 	CostPrice     float64     `gorm:"column:cost_price;type:float(10,2);not null;default:0.00;comment:成本价格" json:"costPrice"`
 	StockQuantity int         `gorm:"column:stock_quantity;type:int;not null;default:0;comment:库存数量" json:"stockQuantity"`
 	Brand         *string     `gorm:"column:brand;type:varchar(50);comment:商品品牌" json:"brand"`
+	Color         StringSlice `gorm:"column:color;type:varchar(300);comment:商品颜色" json:"color"`
+	Storage       StringSlice `gorm:"column:storage;type:varchar(300);comment:商品存储" json:"storage"`
 	CategoryID    int         `gorm:"column:category_id;type:int;not null;default:0;comment:商品分类ID" json:"categoryId"`
 	UpdateTime    time.Time   `gorm:"column:update_time;type:datetime;not null;comment:更新时间" json:"updateTime"`
 	CreateTime    time.Time   `gorm:"column:create_time;type:datetime;not null;comment:创建时间" json:"createTime"`
