@@ -53,6 +53,39 @@ type Product struct {
 	Specifications []map[string]interface{} `gorm:"-" json:"specifications"`
 }
 
+type Option struct {
+	Name   string   `json:"name"`
+	Values []string `json:"values"`
+}
+
+var CategoryMap = map[int]string{
+	1: "平板",
+	2: "電腦",
+	3: "手機",
+	4: "智能手錶",
+}
+
+type FrontendProduct struct {
+	ID             int64                    `json:"id"`
+	Name           string                   `json:"name"`
+	CoverImage     string                   `json:"coverImage"`
+	DetailImages   []string                 `json:"detailImages"`
+	Description    string                   `json:"description"`
+	SalePrice      float64                  `json:"salePrice"`
+	CostPrice      float64                  `json:"costPrice"`
+	StockQuantity  int                      `json:"stockQuantity"`
+	Brand          *string                  `json:"brand"`
+	Options        []Option                 `json:"options"`
+	Features       []string                 `json:"features"`
+	Category       string                   `json:"category"`
+	UpdateTime     time.Time                `json:"updateTime"`
+	CreateTime     time.Time                `json:"createTime"`
+	IsAvailable    bool                     `json:"isAvailable"`
+	IsDeleted      bool                     `json:"isDeleted"`
+	Type           int                      `json:"type"`
+	Specifications []map[string]interface{} `json:"specifications"`
+}
+
 func (Product) TableName() string {
 	return "product"
 }

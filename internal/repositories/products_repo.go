@@ -20,36 +20,18 @@ func (r *ProductRepository) GetAllProducts() ([]*models.Product, error) {
 	return products, err
 }
 
-func (r *ProductRepository) GetProductById(id int) (*models.Product, error) {
+func (r *ProductRepository) GetProductById(id int) (*models.Product, []*models.Specification, error) {
 	var product = new(models.Product)
 	err := r.engine.Table(models.Product{}.TableName()).Where("id = ?", id).Find(product).Error
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var specifications []*models.Specification
 	err = r.engine.Table(models.Specification{}.TableName()).Where("product_id = ?", id).Find(&specifications).Error
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	// 将 specifications 按 category 分组
-	specMap := make(map[string][]map[string]string)
-	for _, spec := range specifications {
-		item := map[string]string{"name": spec.Name, "value": spec.Value}
-		specMap[spec.Category] = append(specMap[spec.Category], item)
-	}
-
-	// 将分组后的 specifications 转换为所需格式
-	var formattedSpecifications []map[string]interface{}
-	for category, items := range specMap {
-		formattedSpecifications = append(formattedSpecifications, map[string]interface{}{
-			"category": category,
-			"items":    items,
-		})
-	}
-
-	product.Specifications = formattedSpecifications
-
-	return product, nil
+	return product, specifications, nil
 }
