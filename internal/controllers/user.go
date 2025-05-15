@@ -92,3 +92,47 @@ func (l *UserController) Register(c *gin.Context) {
 		"status":  "success",
 	})
 }
+
+// // GetTokenInfo 处理前端传来的token并返回解析后的信息
+// func (u *UserController) GetRoles(c *gin.Context) {
+// 	// 从请求参数中获取token
+// 	token := c.Query("token")
+// 	if token == "" {
+// 		// 如果请求参数中没有token，从请求头中获取token
+// 		token = c.GetHeader("Authorization")
+// 		if token == "" {
+// 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is missing"})
+// 			return
+// 		}
+// 	}
+
+// 	// 去掉 'Bearer ' 前缀
+// 	token = strings.TrimPrefix(token, "Bearer ")
+
+// 	// 调用ParseToken方法解析token
+// 	claims, err := middleware.ParseToken(token)
+// 	if err != nil {
+// 		c.JSON(200, utils.Error(400, "token 解析錯誤"))
+// 		return
+// 	}
+
+// 	// 返回解析后的信息
+// 	c.JSON(200, utils.Success{claims, "success"})
+// }
+
+func (l *UserController) GetInfo(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	// fmt.Println(token)
+	if token == "" {
+		c.JSON(200, gin.H{"error": "Token is missing"})
+		return
+	}
+	claim, err := l.UserService.GetInfo(token)
+	// fmt.Println(claim)
+	if err != nil {
+		c.JSON(200, gin.H{"error": "Token is invalid"})
+		return
+	}
+	// fmt.Println(claim)
+	c.JSON(200, utils.Success(claim, "success"))
+}

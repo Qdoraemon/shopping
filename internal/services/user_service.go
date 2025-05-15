@@ -2,9 +2,11 @@ package services
 
 import (
 	"errors"
+	"shopping/internal/middleware"
 	"shopping/internal/models"
 	"shopping/internal/repositories"
 	"shopping/internal/utils"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -35,4 +37,20 @@ func (us *UserService) LoginUser(username string, password string) (*models.User
 	}
 	return user, nil
 
+}
+
+func (us *UserService) GetInfo(token string) (*middleware.MyClaims, error) {
+	if condition := strings.Contains(token, "Bearer"); !condition {
+		return &middleware.MyClaims{}, errors.New("token格式錯誤")
+	}
+
+	// 去掉前缀Bearer
+	tokenString := strings.TrimPrefix(token, "Bearer ")
+	// 解析token
+	Claims, err := middleware.ParseToken(tokenString)
+	if err != nil {
+		return &middleware.MyClaims{}, err
+	}
+
+	return Claims, err
 }

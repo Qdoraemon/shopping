@@ -58,4 +58,6 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	// 注册删除证书路由
 	brands.DELETE("/deleteBrand/:id", brandsController.DeleteBrands)
 
+	// 獲取用戶信息
+	base.GET("/client/getRoles", userController.GetInfo)
 }
