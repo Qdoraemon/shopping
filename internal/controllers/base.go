@@ -35,7 +35,7 @@ func (l *BaseController) UploadImage(c *gin.Context) {
 		c.JSON(200, utils.Error(400, "文件大小超过限制"))
 		return
 	}
-	fmt.Println("00ol")
+	// fmt.Println("00ol")
 	// 修改图片名称，这里简单使用当前时间戳作为文件名
 	// SaveFileName := fmt.Sprintf("%d%s", time.Now().UnixMicro(), filepath.Ext(file.Filename))
 	SaveFileName := fmt.Sprintf("shopping_%d", time.Now().UnixMicro())
@@ -48,7 +48,7 @@ func (l *BaseController) UploadImage(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, utils.Success(fmt.Sprintf("%s.jfif", SaveFileName), "上传成功"))
+	c.JSON(200, utils.Success(fmt.Sprintf("%s%s", SaveFileName, filepath.Ext(file.Filename)), "上传成功"))
 }
 
 // GetImage 动态读取图片并返回给客户端
@@ -72,4 +72,28 @@ func (l *BaseController) GetImage(c *gin.Context) {
 	// 设置响应头
 	c.Header("Content-Type", "image/jpeg") // 根据实际情况修改图片类型
 	c.Data(200, "image/jpeg", fileContent)
+}
+
+// 刪除圖片
+func (l *BaseController) DeleteImage(c *gin.Context) {
+	var req struct {
+		ImageUrl string `json:"imageUrl"`
+	}
+
+	// 解析请求体中的参数
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(200, utils.Error(400, "无效请求"))
+		return
+	}
+
+	// 删除文件
+	err := os.Remove("./uploads/" + req.ImageUrl) // 这里假设 URL 是文件的路径
+	if err != nil {
+		c.JSON(200, utils.Error(400, "删除文件失败"))
+		return
+	}
+
+	// 假设这里还会删除数据库中的记录
+
+	c.JSON(200, utils.Success(nil, "删除成功"))
 }

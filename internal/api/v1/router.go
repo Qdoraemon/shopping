@@ -25,7 +25,8 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	fileUpload := r.Group("/v1/fileUpload")
 	fileUpload.POST("/upload", baseController.UploadImage)
 
-	base.GET("/getLatestImage", baseController.GetImage)
+	base.GET("/getImage", baseController.GetImage)
+	base.DELETE("/deleteImage", baseController.DeleteImage)
 
 	base.POST("/admins/login", userController.Login)
 	base.POST("/admins/register", userController.Register)
