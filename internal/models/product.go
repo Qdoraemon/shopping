@@ -32,30 +32,25 @@ func (s StringSlice) Value() (driver.Value, error) {
 }
 
 type Product struct {
-	ID             int64                    `gorm:"column:id;type:bigint;primaryKey;autoIncrement" json:"id"`
-	Name           string                   `gorm:"column:name;type:varchar(50);not null;comment:商品名称" json:"name"`
-	CoverImage     string                   `gorm:"column:cover_image;type:varchar(200);not null;comment:商品封面图"  json:"coverImage"`
-	DetailImages   StringSlice              `gorm:"column:detail_images;type:varchar(1000);comment:商品详情图片" json:"detailImages"`
-	Description    string                   `gorm:"column:description;type:varchar(255);not null;comment:商品描述" json:"description"`
-	SalePrice      float64                  `gorm:"column:sale_price;type:float(10,2);not null;default:0.00;comment:销售价格" json:"salePrice"`
-	CostPrice      float64                  `gorm:"column:cost_price;type:float(10,2);not null;default:0.00;comment:成本价格" json:"costPrice"`
-	StockQuantity  int                      `gorm:"column:stock_quantity;type:int;not null;default:0;comment:库存数量" json:"stockQuantity"`
-	Brand          *string                  `gorm:"column:brand;type:varchar(50);comment:商品品牌" json:"brand"`
-	Color          StringSlice              `gorm:"column:color;type:varchar(300);comment:商品颜色" json:"color"`
-	Storage        StringSlice              `gorm:"column:storage;type:varchar(300);comment:商品存储" json:"storage"`
-	Features       StringSlice              `gorm:"column:features;type:varchar(300);comment:商品特性" json:"features"`
-	CategoryID     int                      `gorm:"column:category_id;type:int;not null;default:0;comment:商品分类ID" json:"categoryId"`
-	UpdateTime     time.Time                `gorm:"column:update_time;type:datetime;not null;comment:更新时间" json:"updateTime"`
-	CreateTime     time.Time                `gorm:"column:create_time;type:datetime;not null;comment:创建时间" json:"createTime"`
-	IsAvailable    bool                     `gorm:"column:is_available;type:tinyint(1);not null;default:1;comment:上下架状态 0:下架 1:上架" json:"isAvailable"`
-	IsDeleted      bool                     `gorm:"column:is_deleted;type:tinyint(1);not null;default:1;comment:是否删除 0：删除 1：正常" json:"isDeleted"`
-	Type           int                      `gorm:"not null;default:0;comment:默认类型：0" json:"type"`
-	Specifications []map[string]interface{} `gorm:"-" json:"specifications"`
-}
-
-type Option struct {
-	Name   string   `json:"name"`
-	Values []string `json:"values"`
+	ID              int64                    `gorm:"column:id;type:bigint;primaryKey;autoIncrement" json:"id"`
+	Name            string                   `gorm:"column:name;type:varchar(50);not null;comment:商品名称" json:"name"`
+	CoverImage      string                   `gorm:"column:cover_image;type:varchar(200);not null;comment:商品封面图"  json:"coverImage"`
+	DetailImages    StringSlice              `gorm:"column:detail_images;type:varchar(1000);comment:商品详情图片" json:"detailImages"`
+	Description     string                   `gorm:"column:description;type:varchar(255);not null;comment:商品描述" json:"description"`
+	SalePrice       float64                  `gorm:"column:sale_price;type:float(10,2);not null;default:0.00;comment:销售价格" json:"salePrice"`
+	CostPrice       float64                  `gorm:"column:cost_price;type:float(10,2);not null;default:0.00;comment:成本价格" json:"costPrice"`
+	StockQuantity   int                      `gorm:"column:stock_quantity;type:int;not null;default:0;comment:库存数量" json:"stockQuantity"`
+	Brand           *string                  `gorm:"column:brand;type:varchar(50);comment:商品品牌" json:"brand"`
+	Features        StringSlice              `gorm:"column:features;type:varchar(300);comment:商品特性" json:"features"`
+	LongDescription string                   `gorm:"column:long_description;type:varchar(1000);comment:商品长描述" json:"longDescription"`
+	CategoryID      int                      `gorm:"column:category_id;type:int;not null;default:0;comment:商品分类ID" json:"categoryId"`
+	UpdateTime      time.Time                `gorm:"column:update_time;type:datetime;not null;comment:更新时间" json:"updateTime"`
+	CreateTime      time.Time                `gorm:"column:create_time;type:datetime;not null;comment:创建时间" json:"createTime"`
+	IsAvailable     bool                     `gorm:"column:is_available;type:tinyint(1);not null;default:1;comment:上下架状态 0:下架 1:上架" json:"isAvailable"`
+	IsDeleted       bool                     `gorm:"column:is_deleted;type:tinyint(1);not null;default:1;comment:是否删除 0：删除 1：正常" json:"isDeleted"`
+	Type            int                      `gorm:"not null;default:0;comment:默认类型：0" json:"type"`
+	Specifications  []map[string]interface{} `gorm:"-" json:"specifications"`
+	Options         []map[string]interface{} `gorm:"-" json:"options"`
 }
 
 var CategoryMap = map[int]string{
@@ -63,27 +58,6 @@ var CategoryMap = map[int]string{
 	2: "電腦",
 	3: "手機",
 	4: "智能手錶",
-}
-
-type FrontendProduct struct {
-	ID             int64                    `json:"id"`
-	Name           string                   `json:"name"`
-	CoverImage     string                   `json:"coverImage"`
-	DetailImages   []string                 `json:"detailImages"`
-	Description    string                   `json:"description"`
-	SalePrice      float64                  `json:"salePrice"`
-	CostPrice      float64                  `json:"costPrice"`
-	StockQuantity  int                      `json:"stockQuantity"`
-	Brand          *string                  `json:"brand"`
-	Options        []Option                 `json:"options"`
-	Features       []string                 `json:"features"`
-	Category       string                   `json:"category"`
-	UpdateTime     time.Time                `json:"updateTime"`
-	CreateTime     time.Time                `json:"createTime"`
-	IsAvailable    bool                     `json:"isAvailable"`
-	IsDeleted      bool                     `json:"isDeleted"`
-	Type           int                      `json:"type"`
-	Specifications []map[string]interface{} `json:"specifications"`
 }
 
 func (Product) TableName() string {

@@ -1,5 +1,11 @@
 package utils
 
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
 type Response struct {
 	Data    interface{} `json:"data"`
 	Message string      `json:"message"`
@@ -22,4 +28,12 @@ func Error(Code int, Message string) Response {
 		Code:    Code,
 	}
 
+}
+
+func GenFileNameByUUID(prefix string) string {
+	return prefix + "_" + uuid.New().String()
+}
+
+func GetFileNameByTime() string {
+	return time.Now().Format("20060102150405")
 }

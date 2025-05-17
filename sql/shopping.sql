@@ -144,12 +144,20 @@ CREATE TABLE `specifications` (
     FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+DROP TABLE IF EXISTS `options`;
+CREATE TABLE `options` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `product_id` BIGINT NOT NULL COMMENT '商品ID',
+    `name` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '选项名称',
+    `values` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '选项值'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
 -- ----------------------------
 -- Records of product
 -- ----------------------------
 INSERT INTO `product` VALUES (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 
                       'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg'
-                      , 'ipad 10 商品', 1000.00, 500.00, 0, 'Apple', '藍色,黑色,粉色,黃色','64GB,128GB', 
+                      , 'ipad 10 商品', 1000.00, 500.00, 0, 
                       '10.9英寸Liquid Retina顯示屏,A14仿生晶片,支持Apple Pencil（第1代）,支持Magic Keyboard Folio,1200萬像素後置攝像頭,USB-C接口,支持Wi-Fi 6,長達10小時的電池續航'
                       ,1, '2025-04-25 01:34:05', '2025-04-25 01:34:08', 1, 1, 1);
 
@@ -171,6 +179,11 @@ INSERT INTO `specifications` (`product_id`, `category`, `name`, `value`) VALUES
 (1, '尺寸', '寬度', '178.5毫米'),
 (1, '尺寸', '厚度', '6.1毫米'),
 (1, '重量', '重量', '460克');
+
+
+INSERT INTO `options` (`product_id`, `name`, `values`) VALUES
+(1, 'color', '藍色,黑色,粉色,黃色'),
+(1, 'storage', '64GB,128GB');
 
 -- ----------------------------
 -- Table structure for user
