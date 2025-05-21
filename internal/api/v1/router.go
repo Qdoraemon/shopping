@@ -61,4 +61,7 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 
 	// 獲取用戶信息
 	base.GET("/client/getRoles", userController.GetInfo)
+
+	// 添加商品
+	products.POST("/addProduct", productController.AddProduct)
 }

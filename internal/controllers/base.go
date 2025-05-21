@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
 	"shopping/internal/utils"
 
 	"github.com/gin-gonic/gin"
@@ -29,28 +27,38 @@ func (l *BaseController) UploadImage(c *gin.Context) {
 	var uploadedFiles []string
 
 	for _, file := range files {
-		// 检查文件类型，这里简单判断文件后缀是否为图片
-		if file.Header.Get("Content-Type") != "image/jpeg" && file.Header.Get("Content-Type") != "image/png" {
-			c.JSON(200, utils.Error(400, "文件类型不支持"))
-			return
-		}
-		// // 检查文件大小，这里简单判断文件大小不超过 2MB
-		if file.Size > 5*1024*1024 {
-			c.JSON(200, utils.Error(400, "文件大小超过限制"))
-			return
-		}
-		// 修改图片名称，这里简单使用UUID戳作为文件名
-		SaveFileName := utils.GenFileNameByUUID("Image")
+		// // 检查文件类型，这里简单判断文件后缀是否为图片
+		// if file.Header.Get("Content-Type") != "image/jpeg" && file.Header.Get("Content-Type") != "image/png" {
+		// 	c.JSON(200, utils.Error(400, "文件类型不支持"))
+		// 	return
+		// }
 
-		// 定义保存文件的路径，UUID生成對應的文件名
-		dest := fmt.Sprintf("./uploads/%s%s", SaveFileName, filepath.Ext(file.Filename))
-		// 保存文件
-		if err := c.SaveUploadedFile(file, dest); err != nil {
-			c.JSON(200, utils.Error(400, "保存文件失败"))
+		// fmt.Println("file type is: ", reflect.TypeOf(file))
+
+		// // // 检查文件大小，这里简单判断文件大小不超过 5MB
+		// if file.Size > 5*1024*1024 {
+		// 	c.JSON(200, utils.Error(400, "文件大小超过限制"))
+		// 	return
+		// }
+		// // 修改图片名称，这里简单使用UUID戳作为文件名
+		// SaveFileName := utils.GenFileNameByUUID("Image")
+
+		// // 定义保存文件的路径，UUID生成對應的文件名
+		// dest := fmt.Sprintf("./uploads/%s%s", SaveFileName, filepath.Ext(file.Filename))
+		// // 保存文件
+		// if err := c.SaveUploadedFile(file, dest); err != nil {
+		// 	c.JSON(200, utils.Error(400, "保存文件失败"))
+		// 	return
+		// }
+
+		SaveFileName, err := utils.ResizeImage(file, "./uploads/", 1000)
+
+		if err != nil {
+			c.JSON(200, utils.Error(400, err.Error()))
 			return
 		}
 
-		uploadedFiles = append(uploadedFiles, fmt.Sprintf("%s%s", SaveFileName, filepath.Ext(file.Filename)))
+		uploadedFiles = append(uploadedFiles, SaveFileName)
 	}
 
 	// fmt.Println(uploadedFiles)

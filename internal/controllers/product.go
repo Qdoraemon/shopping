@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"shopping/internal/models"
 	"shopping/internal/services"
 	"shopping/internal/utils"
 	"strconv"
@@ -43,4 +45,18 @@ func (l *ProductController) GetProductById(c *gin.Context) {
 	// 3. 返回结果
 	c.JSON(200, utils.Success(result, "登录成功"))
 
+}
+
+func (l *ProductController) AddProduct(c *gin.Context) {
+	var product models.Product
+	c.ShouldBindJSON(&product)
+	// data := c.PostForm("data")
+	fmt.Println("data: ", product)
+	err := l.ProductService.AddProduct(&product)
+	if err != nil {
+		// fmt.Println(err)
+		c.JSON(200, utils.Error(400, "获取失败"))
+		return
+	}
+	c.JSON(200, utils.Success("", "登录成功"))
 }

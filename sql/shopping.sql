@@ -37,7 +37,7 @@ CREATE TABLE `base_information`  (
 -- ----------------------------
 -- Records of base_information
 -- ----------------------------
-INSERT INTO `base_information` VALUES (1, '測試用戶', NULL, '1234567890', '123@test.com', '測試地址', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 0, 0);
+INSERT INTO `base_information` VALUES (1, '測試用戶', NULL, '1234567890', '123@test.com', '我的測試地址', '@/assets/barcode.png', 0, 0);
 
 -- ----------------------------
 -- Table structure for brands
@@ -121,9 +121,8 @@ CREATE TABLE `product`  (
   `cost_price` float(10, 2) NOT NULL DEFAULT 0.00 COMMENT '成本价格',
   `stock_quantity` int NOT NULL DEFAULT 0 COMMENT '库存数量',
   `brand` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品品牌',
-  `color` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '颜色',
-  `storage` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '存储',
   `features` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品特點',
+  `long_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '长描述',
   `category_id` int NOT NULL DEFAULT 0 COMMENT '商品分类ID',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -152,14 +151,36 @@ CREATE TABLE `options` (
     `values` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '选项值'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+
+DROP TABLE IF EXISTS `product_variants`;
+CREATE TABLE `product_variants` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `product_id` BIGINT NOT NULL COMMENT '商品ID',
+  `options` JSON NOT NULL COMMENT '选项',
+  `price` FLOAT(10, 2) NOT NULL COMMENT '价格',
+  `stock` INT NOT NULL COMMENT '库存',
+  FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product` VALUES (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 
-                      'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg'
-                      , 'ipad 10 商品', 1000.00, 500.00, 0, 
-                      '10.9英寸Liquid Retina顯示屏,A14仿生晶片,支持Apple Pencil（第1代）,支持Magic Keyboard Folio,1200萬像素後置攝像頭,USB-C接口,支持Wi-Fi 6,長達10小時的電池續航'
-                      ,1, '2025-04-25 01:34:05', '2025-04-25 01:34:08', 1, 1, 1);
+INSERT INTO `product`  (`id`, `name`, `cover_image`, `detail_images`, `description`, `sale_price`, `cost_price`, `stock_quantity`, `features`,  `long_description`, `category_id`, `update_time`, `create_time`, `is_available`, `is_deleted`, `type`) VALUES 
+(1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 
+'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg'
+, 'iPad 10配備了10.9英寸Liquid Retina顯示屏，顯示效果出色。內置A14仿生晶片，提供強大的性能和高效的能耗管理。支持Apple Pencil（第1代）和Magic Keyboard Folio，讓你在創作和工作中更加得心應手。擁有1200萬像素後置攝像頭，拍攝效果清晰。配備USB-C接口，支持Wi-Fi 6，連接更加快速穩定。電池續航時間長達10小時，滿足你一整天的使用需求。'
+, 1000.00
+, 500.00
+, 0
+, '10.9英寸Liquid Retina顯示屏,A14仿生晶片,支持Apple Pencil（第1代）,支持Magic Keyboard Folio,1200萬像素後置攝像頭,USB-C接口,支持Wi-Fi 6,長達10小時的電池續航'
+, 'iPad 10配備了10.9英寸Liquid Retina顯示屏，顯示效果出色。內置A14仿生晶片，提供強大的性能和高效的能耗管理。支持Apple Pencil（第1代）和Magic Keyboard Folio，讓你在創作和工作中更加得心應手。擁有1200萬像素後置攝像頭，拍攝效果清晰。配備USB-C接口，支持Wi-Fi 6，連接更加快速穩定。電池續航時間長達10小時，滿足你一整天的使用需求。'
+, 1
+, '2025-04-25 01:34:05'
+, '2025-04-25 01:34:08'
+, 1
+, 1
+, 1);
 
 
 INSERT INTO `specifications` (`product_id`, `category`, `name`, `value`) VALUES
@@ -182,8 +203,22 @@ INSERT INTO `specifications` (`product_id`, `category`, `name`, `value`) VALUES
 
 
 INSERT INTO `options` (`product_id`, `name`, `values`) VALUES
-(1, 'color', '藍色,黑色,粉色,黃色'),
-(1, 'storage', '64GB,128GB');
+(1, '顔色', '藍色,黑色,粉色,黃色'),
+(1, '存儲', '64GB,128GB');
+
+INSERT INTO `product_variants` (`product_id`, `options`, `price`, `stock`) VALUES
+(1, '[0, 0]', 1299, 15),
+(1, '[0, 1]', 1499, 8),
+(1, '[0, 2]', 1699, 3),
+(1, '[1, 0]', 1299, 20),
+(1, '[1, 1]', 1499, 12),
+(1, '[1, 2]', 1699, 5),
+(1, '[2, 0]', 1399, 10),
+(1, '[2, 1]', 1599, 6),
+(1, '[2, 2]', 1799, 0),
+(1, '[3, 0]', 1399, 7),
+(1, '[3, 1]', 1599, 4),
+(1, '[3, 2]', 1799, 2);
 
 -- ----------------------------
 -- Table structure for user

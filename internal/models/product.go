@@ -31,6 +31,10 @@ func (s StringSlice) Value() (driver.Value, error) {
 	return strings.Join(s, ","), nil
 }
 
+func (s *StringSlice) FromString(str string) {
+	*s = strings.Split(str, ",")
+}
+
 type Product struct {
 	ID              int64                    `gorm:"column:id;type:bigint;primaryKey;autoIncrement" json:"id"`
 	Name            string                   `gorm:"column:name;type:varchar(50);not null;comment:商品名称" json:"name"`
@@ -51,6 +55,7 @@ type Product struct {
 	Type            int                      `gorm:"not null;default:0;comment:默认类型：0" json:"type"`
 	Specifications  []map[string]interface{} `gorm:"-" json:"specifications"`
 	Options         []map[string]interface{} `gorm:"-" json:"options"`
+	Variants        []map[string]interface{} `gorm:"-" json:"variants"`
 }
 
 var CategoryMap = map[int]string{

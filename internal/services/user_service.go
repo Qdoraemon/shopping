@@ -32,7 +32,7 @@ func (us *UserService) LoginUser(username string, password string) (*models.User
 		return nil, err
 	}
 
-	if utils.CheckPasswordHash(password, user.Password) == false {
+	if utils.CheckPasswordHash(password, user.Password) {
 		return nil, errors.New("invalid password")
 	}
 	return user, nil
