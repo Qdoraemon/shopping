@@ -50,7 +50,7 @@ type Product struct {
 	CategoryID      int                      `gorm:"column:category_id;type:int;not null;default:0;comment:商品分类ID" json:"categoryId"`
 	UpdateTime      time.Time                `gorm:"column:update_time;type:datetime;not null;comment:更新时间" json:"updateTime"`
 	CreateTime      time.Time                `gorm:"column:create_time;type:datetime;not null;comment:创建时间" json:"createTime"`
-	IsAvailable     bool                     `gorm:"column:is_available;type:tinyint(1);not null;default:1;comment:上下架状态 0:下架 1:上架" json:"isAvailable"`
+	Status          string                   `gorm:"column:status;type:varchar(20);not null;default:'1';comment:上下架状态 0:草稿 1:已發佈 2:隱藏" json:"status"`
 	IsDeleted       bool                     `gorm:"column:is_deleted;type:tinyint(1);not null;default:1;comment:是否删除 0：删除 1：正常" json:"isDeleted"`
 	Type            int                      `gorm:"not null;default:0;comment:默认类型：0" json:"type"`
 	Specifications  []map[string]interface{} `gorm:"-" json:"specifications"`

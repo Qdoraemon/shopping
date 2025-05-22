@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"shopping/internal/models"
 	"shopping/internal/services"
 	"shopping/internal/utils"
@@ -51,7 +50,7 @@ func (l *ProductController) AddProduct(c *gin.Context) {
 	var product models.Product
 	c.ShouldBindJSON(&product)
 	// data := c.PostForm("data")
-	fmt.Println("data: ", product)
+	// fmt.Println("data: ", product)
 	err := l.ProductService.AddProduct(&product)
 	if err != nil {
 		// fmt.Println(err)

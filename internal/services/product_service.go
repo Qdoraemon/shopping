@@ -152,6 +152,8 @@ func (s *ProductService) AddProduct(p *models.Product) error {
 	p.UpdateTime = time.Now()
 	p.CreateTime = time.Now()
 	p.IsDeleted = false
+
+	// fmt.Println("product:", p)
 	return s.productRepo.AddProduct(p, options, specifications)
 
 	// return s.productRepo.AddProduct(&input.Product, options, specifications)

@@ -126,7 +126,7 @@ CREATE TABLE `product`  (
   `category_id` int NOT NULL DEFAULT 0 COMMENT '商品分类ID',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `is_available` tinyint(1) NOT NULL DEFAULT 1 COMMENT '上下架状态 0:下架 1:上架',
+  `status` varchar(20) NOT NULL DEFAULT "1" COMMENT '上下架状态 0:草稿 1:已發佈 2:隱藏',
   `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
   `type` int NOT NULL DEFAULT 0 COMMENT '默认类型：0',
   PRIMARY KEY (`id`) USING BTREE
@@ -166,19 +166,19 @@ CREATE TABLE `product_variants` (
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product`  (`id`, `name`, `cover_image`, `detail_images`, `description`, `sale_price`, `cost_price`, `stock_quantity`, `features`,  `long_description`, `category_id`, `update_time`, `create_time`, `is_available`, `is_deleted`, `type`) VALUES 
+INSERT INTO `product`  (`id`, `name`, `cover_image`, `detail_images`, `description`, `sale_price`, `cost_price`, `stock_quantity`, `features`,  `long_description`, `category_id`, `update_time`, `create_time`, `status`, `is_deleted`, `type`) VALUES 
 (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 
 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg'
 , 'iPad 10配備了10.9英寸Liquid Retina顯示屏，顯示效果出色。內置A14仿生晶片，提供強大的性能和高效的能耗管理。支持Apple Pencil（第1代）和Magic Keyboard Folio，讓你在創作和工作中更加得心應手。擁有1200萬像素後置攝像頭，拍攝效果清晰。配備USB-C接口，支持Wi-Fi 6，連接更加快速穩定。電池續航時間長達10小時，滿足你一整天的使用需求。'
 , 1000.00
 , 500.00
-, 0
+, 100
 , '10.9英寸Liquid Retina顯示屏,A14仿生晶片,支持Apple Pencil（第1代）,支持Magic Keyboard Folio,1200萬像素後置攝像頭,USB-C接口,支持Wi-Fi 6,長達10小時的電池續航'
 , 'iPad 10配備了10.9英寸Liquid Retina顯示屏，顯示效果出色。內置A14仿生晶片，提供強大的性能和高效的能耗管理。支持Apple Pencil（第1代）和Magic Keyboard Folio，讓你在創作和工作中更加得心應手。擁有1200萬像素後置攝像頭，拍攝效果清晰。配備USB-C接口，支持Wi-Fi 6，連接更加快速穩定。電池續航時間長達10小時，滿足你一整天的使用需求。'
 , 1
 , '2025-04-25 01:34:05'
 , '2025-04-25 01:34:08'
-, 1
+, "1"
 , 1
 , 1);
 
