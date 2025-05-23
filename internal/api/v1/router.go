@@ -64,4 +64,13 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 
 	// 添加商品
 	products.POST("/addProduct", productController.AddProduct)
+
+	// 刪除商品
+	products.DELETE("/deleteProduct/:id", productController.DeleteProduct)
+
+	// 批量刪除商品
+	products.DELETE("/deleteProducts", productController.DeleteProducts)
+
+	// 複製商品
+	products.POST("/copyProduct/:id", productController.CopyProduct)
 }

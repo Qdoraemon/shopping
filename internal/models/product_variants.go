@@ -31,10 +31,10 @@ func (s IntSlice) Value() (driver.Value, error) {
 
 type ProductVariant struct {
 	ID        int      `gorm:"column:id;type:bigint;primaryKey;autoIncrement" json:"id"`
-	ProductID int64    `gorm:"not null;comment:商品ID"`
-	Options   IntSlice `gorm:"type:json;not null;comment:选项"`
-	Price     float64  `gorm:"type:float;not null;comment:价格"`
-	Stock     int      `gorm:"not null;comment:库存"`
+	ProductID int64    `gorm:"not null;comment:商品ID" json:"productId"`
+	Options   IntSlice `gorm:"type:json;not null;comment:选项" json:"options"`
+	Price     float64  `gorm:"type:float;not null;comment:价格" json:"price"`
+	Stock     int      `gorm:"not null;comment:库存" json:"stock"`
 }
 
 func (ProductVariant) TableName() string {

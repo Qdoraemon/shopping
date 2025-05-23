@@ -64,9 +64,9 @@ func (s *ProductService) GetProductDetails(id int) (*models.Product, error) {
 	var formattedVariants []map[string]interface{}
 	for _, variant := range variants {
 		formattedVariants = append(formattedVariants, map[string]interface{}{
-			"option": variant.Options,
-			"price":  variant.Price,
-			"stock":  variant.Stock,
+			"options": variant.Options,
+			"price":   variant.Price,
+			"stock":   variant.Stock,
 		})
 	}
 
@@ -157,4 +157,18 @@ func (s *ProductService) AddProduct(p *models.Product) error {
 	return s.productRepo.AddProduct(p, options, specifications)
 
 	// return s.productRepo.AddProduct(&input.Product, options, specifications)
+}
+
+// DeleteProduct deletes a product by its ID from the repository
+func (s *ProductService) DeleteProduct(id int) error {
+	return s.productRepo.DeleteProduct(id)
+}
+
+// DeleteProducts deletes multiple products by their IDs from the repository
+func (s *ProductService) DeleteProducts(ids []int) error {
+	return s.productRepo.DeleteProducts(ids)
+}
+
+func (s *ProductService) CopyProduct(id int) (*models.Product, error) {
+	return s.productRepo.CopyProduct(id)
 }
