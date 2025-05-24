@@ -115,3 +115,23 @@ func (l *ProductController) CopyProduct(c *gin.Context) {
 
 	c.JSON(200, utils.Success(newProduct, "复制成功"))
 }
+
+func (l *ProductController) UpdateProduct(c *gin.Context) {
+	var product models.Product
+	err := c.ShouldBindJSON(&product)
+
+	// fmt.Println("product: ", product)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "product格式傳入失敗"))
+		return
+	}
+
+	err = l.ProductService.UpdateProduct(&product)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "product 更新失敗"))
+		return
+	}
+
+	// 3. 返回结果
+	c.JSON(200, utils.Success("", "更新成功"))
+}

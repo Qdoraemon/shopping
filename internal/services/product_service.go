@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+	"reflect"
 	"shopping/internal/models"
 	"shopping/internal/repositories"
 	"strings"
@@ -141,12 +143,37 @@ func (s *ProductService) AddProduct(p *models.Product) error {
 	}
 
 	// 处理 Variants
-	// var variants []*models.ProductVariant
-	// for _, variant := range p.Variants {
-	// 	options := variant["option"].(map[string]interface{})
-	// 	price := variant["price"].(float64)
-	// 	stock := int(variant["stock"].(float64))
-	// }
+	var variants []models.ProductVariant
+	for _, variant := range p.Variants {
+		// options := variant["options"].(map[string]interface{})
+		price := variant["price"].(float64)
+		stock := int(variant["stock"].(float64))
+
+		var variantOptions models.IntSlice
+		// fmt.Println("variant['options']", variant["options"])
+		// variantOptions := make(map[string]string)
+		for _, value := range variant["options"].([]interface{}) {
+			// 在这里处理每个 value
+			if val, ok := value.(float64); ok {
+				// 处理 int 类型的 value
+				variantOptions = append(variantOptions, int(val))
+			} else {
+				fmt.Println("value 無法轉爲 int:", reflect.TypeOf(value))
+			}
+		}
+
+		// fmt.Println("variant['options']:", reflect.TypeOf(variant["options"]))
+		// fmt.Println("variantOptions:", variantOptions)
+
+		variants = append(variants, models.ProductVariant{
+			ProductID: p.ID,
+			Options:   variantOptions,
+			Price:     price,
+			Stock:     stock,
+		})
+	}
+
+	// fmt.Println("variants:", variants)
 
 	// fmt.Println("input:", p.DetailImages)
 	p.UpdateTime = time.Now()
@@ -154,9 +181,8 @@ func (s *ProductService) AddProduct(p *models.Product) error {
 	p.IsDeleted = false
 
 	// fmt.Println("product:", p)
-	return s.productRepo.AddProduct(p, options, specifications)
+	return s.productRepo.AddProduct(p, options, specifications, variants)
 
-	// return s.productRepo.AddProduct(&input.Product, options, specifications)
 }
 
 // DeleteProduct deletes a product by its ID from the repository
@@ -171,4 +197,84 @@ func (s *ProductService) DeleteProducts(ids []int) error {
 
 func (s *ProductService) CopyProduct(id int) (*models.Product, error) {
 	return s.productRepo.CopyProduct(id)
+}
+
+func (s *ProductService) UpdateProduct(p *models.Product) error {
+	// 处理 Options
+	optionMap := make(map[string][]string)
+	for _, option := range p.Options {
+		name := option["name"].(string)
+		values := option["values"].([]interface{})
+		for _, value := range values {
+			optionMap[name] = append(optionMap[name], value.(string))
+		}
+	}
+
+	// 将 optionMap 转换为所需格式并存储到数据库中
+	var options []*models.Option
+	for name, values := range optionMap {
+		var stringSlice models.StringSlice
+		stringSlice.FromString(strings.Join(values, ","))
+		options = append(options, &models.Option{
+			ProductID: p.ID,
+			Name:      name,
+			Values:    stringSlice,
+		})
+	}
+
+	// 处理 Specifications
+	specMap := make(map[string][]map[string]string)
+	for _, spec := range p.Specifications {
+		category := spec["category"].(string)
+		items := spec["items"].([]interface{})
+		for _, item := range items {
+			itemMap := item.(map[string]interface{})
+			name := itemMap["name"].(string)
+			value := itemMap["value"].(string)
+			specMap[category] = append(specMap[category], map[string]string{"name": name, "value": value})
+		}
+	}
+
+	// 将 specMap 转换为所需格式并存储到数据库中
+	var specifications []*models.Specification
+	for category, items := range specMap {
+		for _, item := range items {
+			specifications = append(specifications, &models.Specification{
+				ProductID: p.ID,
+				Category:  category,
+				Name:      item["name"],
+				Value:     item["value"],
+			})
+		}
+	}
+
+	// 处理 Variants
+	var variants []models.ProductVariant
+	for _, variant := range p.Variants {
+		price := variant["price"].(float64)
+		stock := int(variant["stock"].(float64))
+
+		var variantOptions models.IntSlice
+		for _, value := range variant["options"].([]interface{}) {
+			if val, ok := value.(float64); ok {
+				// 将 float64 转换为 int
+				variantOptions = append(variantOptions, int(val))
+			} else {
+				fmt.Println("value 無法轉爲 int:", reflect.TypeOf(value))
+			}
+		}
+
+		variants = append(variants, models.ProductVariant{
+			ProductID: p.ID,
+			Options:   variantOptions,
+			Price:     price,
+			Stock:     stock,
+		})
+	}
+
+	p.UpdateTime = time.Now()
+	// p.CreateTime = time.Now()
+	// p.IsDeleted = false
+
+	return s.productRepo.UpdateProduct(p, options, specifications, variants)
 }

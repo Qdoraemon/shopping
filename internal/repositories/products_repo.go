@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"shopping/internal/models"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -51,7 +52,7 @@ func (r *ProductRepository) GetProductById(id int) (*models.Product, []*models.S
 	return product, specifications, options, variants, nil
 }
 
-func (r *ProductRepository) AddProduct(product *models.Product, options []*models.Option, specifications []*models.Specification) error {
+func (r *ProductRepository) AddProduct(product *models.Product, options []*models.Option, specifications []*models.Specification, variants []models.ProductVariant) error {
 	// 开启事务
 	tx := r.engine.Begin()
 
@@ -74,6 +75,15 @@ func (r *ProductRepository) AddProduct(product *models.Product, options []*model
 	for _, specification := range specifications {
 		specification.ProductID = product.ID
 		if err := tx.Create(specification).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// // 插入变体数据
+	for _, variant := range variants {
+		variant.ProductID = product.ID
+		if err := tx.Create(&variant).Error; err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -158,7 +168,11 @@ func (r *ProductRepository) CopyProduct(id int) (*models.Product, error) {
 	newProduct.ID = 0                  // 重置ID以生成新记录
 	newProduct.CreateTime = time.Now() // 更新创建时间
 	newProduct.Status = "0"            // 更新状态
-	newProduct.Name = newProduct.Name + " 副本"
+
+	// 判断 newProduct.Name 是否包含 "副本"
+	if !strings.Contains(newProduct.Name, "副本") {
+		newProduct.Name = newProduct.Name + " 副本"
+	}
 
 	// 开启事务
 	tx := r.engine.Begin()
@@ -219,4 +233,64 @@ func (r *ProductRepository) CopyProduct(id int) (*models.Product, error) {
 	}
 
 	return &newProduct, nil
+}
+
+// UpdateProduct updates a product and its related options, specifications, and variants in the database
+func (r *ProductRepository) UpdateProduct(product *models.Product, options []*models.Option, specifications []*models.Specification, variants []models.ProductVariant) error {
+	// 開始一個新事務
+	tx := r.engine.Begin()
+
+	// 更新產品數據
+	if err := tx.Save(product).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 刪除舊的選項數據
+	if err := tx.Where("product_id = ?", product.ID).Delete(&models.Option{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 插入新的選項數據
+	for _, option := range options {
+		option.ProductID = product.ID // 使用產品ID
+		if err := tx.Create(option).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// 刪除舊的規格數據
+	if err := tx.Where("product_id = ?", product.ID).Delete(&models.Specification{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 插入新的規格數據
+	for _, specification := range specifications {
+		specification.ProductID = product.ID // 使用產品ID
+		if err := tx.Create(specification).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// 刪除舊的變體數據
+	if err := tx.Where("product_id = ?", product.ID).Delete(&models.ProductVariant{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 插入新的變體數據
+	for _, variant := range variants {
+		variant.ProductID = product.ID // 使用產品ID
+		if err := tx.Create(&variant).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// 提交事務
+	return tx.Commit().Error
 }

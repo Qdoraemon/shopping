@@ -73,4 +73,7 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 
 	// 複製商品
 	products.POST("/copyProduct/:id", productController.CopyProduct)
+
+	// 更新商品
+	products.PUT("/updateProduct", productController.UpdateProduct)
 }
