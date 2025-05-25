@@ -124,15 +124,16 @@ func (l *UserController) GetInfo(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	// fmt.Println(token)
 	if token == "" {
-		c.JSON(200, gin.H{"error": "Token is missing"})
+		c.JSON(401, utils.Success(401, "Token is missing"))
 		return
 	}
 	claim, err := l.UserService.GetInfo(token)
 	// fmt.Println(claim)
 	if err != nil {
-		c.JSON(200, gin.H{"error": "Token is invalid"})
+		c.JSON(401, utils.Success(401, "Token is invalid"))
 		return
 	}
 	// fmt.Println(claim)
 	c.JSON(200, utils.Success(claim, "success"))
+	// c.JSON(401, utils.Success(401, "Token is invalid"))
 }
