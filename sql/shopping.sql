@@ -58,9 +58,30 @@ CREATE TABLE `brands`  (
 -- ----------------------------
 -- Records of brands
 -- ----------------------------
-INSERT INTO `brands` VALUES (1, '商品', NULL, 'https://img.51miz.com/Element/00/81/29/18/21f4ca05_E812918_ede58726.png', '2025-04-25 22:54:03', '2025-04-25 22:54:06', 1, 1);
-INSERT INTO `brands` VALUES (2, '112', '321', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593018435231.jfif', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
-INSERT INTO `brands` VALUES (3, '1212', '1212', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593082398137.jfif', '2025-04-25 22:58:04', '2025-04-25 22:58:04', 1, 1);
+INSERT INTO `brands` VALUES (1, 'Apple', '蘋果', 'https://img.51miz.com/Element/00/81/29/18/21f4ca05_E812918_ede58726.png', '2025-04-25 22:54:03', '2025-04-25 22:54:06', 1, 1);
+INSERT INTO `brands` VALUES (2, 'DJI', '大疆', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593018435231.jfif', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
+
+DROP TABLE IF EXISTS `categories`;
+-- 创建 categories 表
+CREATE TABLE categories (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL COMMENT '类型名称',
+    name_en VARCHAR(50) NOT NULL COMMENT '类型名称',
+    description VARCHAR(255) COMMENT '类型描述',
+    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    is_deleted TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+    is_enabled TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用 0：未启用 1：启用'
+);
+
+-- 插入数据到 categories 表
+INSERT INTO categories (id, name, name_en, description, update_time, create_time, is_deleted, is_enabled) VALUES
+(1, '平板電腦', 'Tablet', '', NOW(), NOW(), 0, 1),
+(2, '智能手機', 'Smartphone', '', NOW(), NOW(), 0, 1),
+(3, '無線耳機', 'Headphone', '', NOW(), NOW(), 0, 1),
+(4, '筆記本電腦', 'Laptop', '', NOW(), NOW(), 0, 1),
+(5, '無人機', 'Drone', '', NOW(), NOW(), 0, 1),
+(6, '珠寶首飾', 'Jewelry', '', NOW(), NOW(), 0, 1);
 
 -- ----------------------------
 -- Table structure for carousel
@@ -120,7 +141,7 @@ CREATE TABLE `product`  (
   `sale_price` float(10, 2) NOT NULL DEFAULT 0.00 COMMENT '销售价格',
   `cost_price` float(10, 2) NOT NULL DEFAULT 0.00 COMMENT '成本价格',
   `stock_quantity` int NOT NULL DEFAULT 0 COMMENT '库存数量',
-  `brand` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品品牌',
+  `brand_id` int NOT NULL DEFAULT 0 COMMENT '商品品牌ID',
   `features` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品特點',
   `long_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '长描述',
   `category_id` int NOT NULL DEFAULT 0 COMMENT '商品分类ID',
@@ -166,13 +187,14 @@ CREATE TABLE `product_variants` (
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product`  (`id`, `name`, `cover_image`, `detail_images`, `description`, `sale_price`, `cost_price`, `stock_quantity`, `features`,  `long_description`, `category_id`, `update_time`, `create_time`, `status`, `is_deleted`, `type`) VALUES 
+INSERT INTO `product`  (`id`, `name`, `cover_image`, `detail_images`, `description`, `sale_price`, `cost_price`, `stock_quantity`, `brand_id`, `features`,  `long_description`, `category_id`, `update_time`, `create_time`, `status`, `is_deleted`, `type`) VALUES 
 (1, 'ipad 10', 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg', 
 'https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg,https://i.ebayimg.com/images/g/EcIAAOSwropmIhRN/s-l1200.jpg'
 , 'iPad 10配備了10.9英寸Liquid Retina顯示屏，顯示效果出色。內置A14仿生晶片，提供強大的性能和高效的能耗管理。支持Apple Pencil（第1代）和Magic Keyboard Folio，讓你在創作和工作中更加得心應手。擁有1200萬像素後置攝像頭，拍攝效果清晰。配備USB-C接口，支持Wi-Fi 6，連接更加快速穩定。電池續航時間長達10小時，滿足你一整天的使用需求。'
 , 1000.00
 , 500.00
 , 100
+, 1
 , '10.9英寸Liquid Retina顯示屏,A14仿生晶片,支持Apple Pencil（第1代）,支持Magic Keyboard Folio,1200萬像素後置攝像頭,USB-C接口,支持Wi-Fi 6,長達10小時的電池續航'
 , 'iPad 10配備了10.9英寸Liquid Retina顯示屏，顯示效果出色。內置A14仿生晶片，提供強大的性能和高效的能耗管理。支持Apple Pencil（第1代）和Magic Keyboard Folio，讓你在創作和工作中更加得心應手。擁有1200萬像素後置攝像頭，拍攝效果清晰。配備USB-C接口，支持Wi-Fi 6，連接更加快速穩定。電池續航時間長達10小時，滿足你一整天的使用需求。'
 , 1

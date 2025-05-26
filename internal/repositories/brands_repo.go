@@ -52,3 +52,10 @@ func (r *BrandsRepository) DeleteBrands(id interface{}) error {
 		Error
 	return err
 }
+
+// 獲取所有的品牌
+func (r *BrandsRepository) GetAllBrands() ([]*models.Brands, error) {
+	var brands []*models.Brands
+	err := r.engine.Table(models.Brands{}.TableName()).Find(&brands).Error
+	return brands, err
+}
