@@ -294,3 +294,25 @@ func (r *ProductRepository) UpdateProduct(product *models.Product, options []*mo
 	// 提交事務
 	return tx.Commit().Error
 }
+
+// 根据分類ID獲取數據
+func (r *ProductRepository) GetProductsByCategoryID(categoryID int) ([]*models.Product, error) {
+	var products []*models.Product
+	err := r.engine.Table(models.Product{}.TableName()).Where("category_id =?", categoryID).Find(&products).Error
+
+	return products, err
+}
+
+// 根据品牌ID獲取數據
+func (r *ProductRepository) GetProductsByBrandID(brandID int) ([]*models.Product, error) {
+	var products []*models.Product
+	err := r.engine.Table(models.Product{}.TableName()).Where("brand_id =?", brandID).Find(&products).Error
+	return products, err
+}
+
+// 根據名稱獲取數據
+func (r *ProductRepository) GetProductsByName(name string) ([]*models.Product, error) {
+	var products []*models.Product
+	err := r.engine.Table(models.Product{}.TableName()).Where("name LIKE ?", "%"+name+"%").Find(&products).Error
+	return products, err
+}

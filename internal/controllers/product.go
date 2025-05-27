@@ -135,3 +135,47 @@ func (l *ProductController) UpdateProduct(c *gin.Context) {
 	// 3. 返回结果
 	c.JSON(200, utils.Success("", "更新成功"))
 }
+
+// 根據分類ID獲取數據
+func (l *ProductController) GetProductsByCategoryID(c *gin.Context) {
+	categoryID := c.Param("categoryID")
+	categoryIDNum, err := strconv.Atoi(categoryID)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "categoryID传入错误"))
+		return
+	}
+	result, err := l.ProductService.GetProductsByCategoryID(categoryIDNum)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "通過categoryID獲取商品失敗"))
+	}
+	c.JSON(200, utils.Success(result, "通過categoryID成功獲取商品"))
+}
+
+// 根據品牌ID獲取數據
+func (l *ProductController) GetProductsByBrandID(c *gin.Context) {
+	brandID := c.Param("brandID")
+	brandIDNum, err := strconv.Atoi(brandID)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "brandID传入错误"))
+		return
+	}
+
+	result, err := l.ProductService.GetProductsByBrandID(brandIDNum)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "通過BrandID獲取商品失败"))
+	}
+	c.JSON(200, utils.Success(result, "通過BrandID成功獲取商品"))
+}
+
+// 根據名稱獲取數據
+func (l *ProductController) GetProductsByName(c *gin.Context) {
+	name := c.Param("name")
+
+	result, err := l.ProductService.GetProductsByName(name)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "通過name獲取商品失败"))
+	}
+
+	c.JSON(200, utils.Success(result, "通過name成功獲取商品"))
+
+}

@@ -43,6 +43,12 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	products.GET("/getAllProducts", productController.GetAllProducts)
 	// 根據ID獲取商品
 	products.GET("/getProductById/:id", productController.GetProductById)
+	// 根據分類ID獲取商品
+	products.GET("/getProductsByCategoryID/:categoryID", productController.GetProductsByCategoryID)
+	// 根據品牌ID獲取商品
+	products.GET("/getProductsByBrandID/:brandID", productController.GetProductsByBrandID)
+	// 根據名稱獲取商品
+	products.GET("/getProductsByName/:name", productController.GetProductsByName)
 
 	// 定義categories分組
 	categories := r.Group("/v1/categories")

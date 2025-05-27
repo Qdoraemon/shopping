@@ -76,12 +76,18 @@ CREATE TABLE categories (
 
 -- 插入数据到 categories 表
 INSERT INTO categories (id, name, name_en, description, update_time, create_time, is_deleted, is_enabled) VALUES
-(1, '平板電腦', 'Tablet', '', NOW(), NOW(), 0, 1),
-(2, '智能手機', 'Smartphone', '', NOW(), NOW(), 0, 1),
-(3, '無線耳機', 'Headphone', '', NOW(), NOW(), 0, 1),
-(4, '筆記本電腦', 'Laptop', '', NOW(), NOW(), 0, 1),
-(5, '無人機', 'Drone', '', NOW(), NOW(), 0, 1),
-(6, '珠寶首飾', 'Jewelry', '', NOW(), NOW(), 0, 1);
+(1, 'iPad', 'ipad', '', NOW(), NOW(), 0, 1),
+(2, 'iphone', 'iphone', '', NOW(), NOW(), 0, 1),
+(3, 'AirPods', 'airpods', '', NOW(), NOW(), 0, 1),
+(4, 'Apple Watch', 'watch', '', NOW(), NOW(), 0, 1),
+(5, 'MacBook', 'macbook', '', NOW(), NOW(), 0, 1),
+(6, '無人機', 'drones', '', NOW(), NOW(), 0, 1),
+(7, '手持穩定器', 'handheld gimbals', '', NOW(), NOW(), 0, 1),
+(8, '雲台相機', 'gimbal cameras', '', NOW(), NOW(), 0, 1),
+(9, '無人機配件', 'accessories', '', NOW(), NOW(), 0, 1),
+(10, '首飾', 'jewelry', '', NOW(), NOW(), 0, 1),
+(11, '銀飾系列', 'silver', '', NOW(), NOW(), 0, 1),
+(12, '寶石首飾', 'gemstone', '', NOW(), NOW(), 0, 1);
 
 -- ----------------------------
 -- Table structure for carousel

@@ -278,3 +278,18 @@ func (s *ProductService) UpdateProduct(p *models.Product) error {
 
 	return s.productRepo.UpdateProduct(p, options, specifications, variants)
 }
+
+// 根據CategoryID獲取商品
+func (s *ProductService) GetProductsByCategoryID(id int) ([]*models.Product, error) {
+	return s.productRepo.GetProductsByCategoryID(id)
+}
+
+// 根據BrandID獲取商品
+func (s *ProductService) GetProductsByBrandID(id int) ([]*models.Product, error) {
+	return s.productRepo.GetProductsByBrandID(id)
+}
+
+// 根據BrandID獲取商品
+func (s *ProductService) GetProductsByName(name string) ([]*models.Product, error) {
+	return s.productRepo.GetProductsByName(name)
+}
