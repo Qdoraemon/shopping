@@ -6,47 +6,47 @@ import (
 	"gorm.io/gorm"
 )
 
-type BrandsRepository struct {
+type BrandRepository struct {
 	engine *gorm.DB
 }
 
-func NewBrandsRepository(engine *gorm.DB) *BrandsRepository {
-	return &BrandsRepository{engine: engine}
+func NewBrandRepository(engine *gorm.DB) *BrandRepository {
+	return &BrandRepository{engine: engine}
 }
 
-// GetBrandsByPage 分页查询未删除的证书
-func (r *BrandsRepository) GetBrandsByPage(page, pageSize int) ([]*models.Brands, error) {
-	var brands []*models.Brands
+// GetBrandByPage 分页查询未删除的证书
+func (r *BrandRepository) GetBrandByPage(page, pageSize int) ([]*models.Brand, error) {
+	var Brand []*models.Brand
 	err := r.engine.
-		Table(models.Brands{}.TableName()).
+		Table(models.Brand{}.TableName()).
 		Where("is_deleted = 1").
 		Limit(pageSize).
 		Offset((page - 1) * pageSize).
-		Find(&brands).Error
-	return brands, err
+		Find(&Brand).Error
+	return Brand, err
 }
 
-func (r *BrandsRepository) AddBrands(certificate *models.Brands) error {
-	err := r.engine.Table(models.Brands{}.TableName()).Create(certificate).Error
+func (r *BrandRepository) AddBrand(certificate *models.Brand) error {
+	err := r.engine.Table(models.Brand{}.TableName()).Create(certificate).Error
 	return err
 }
 
-// UpdateBrands 根据证书 ID 更新证书信息
-func (r *BrandsRepository) UpdateBrands(certificate *models.Brands) error {
+// UpdateBrand 根据证书 ID 更新证书信息
+func (r *BrandRepository) UpdateBrand(certificate *models.Brand) error {
 	// 这里假设使用 ID 作为唯一标识进行更新
-	err := r.engine.Table(models.Brands{}.TableName()).
+	err := r.engine.Table(models.Brand{}.TableName()).
 		Where("id = ?", certificate.ID).
 		Updates(certificate).
 		Error
 	return err
 }
 
-// DeleteBrands 根据证书 ID 标记证书为已删除
-func (r *BrandsRepository) DeleteBrands(id interface{}) error {
+// DeleteBrand 根据证书 ID 标记证书为已删除
+func (r *BrandRepository) DeleteBrand(id interface{}) error {
 	updateData := map[string]interface{}{
 		"is_deleted": 0,
 	}
-	err := r.engine.Table(models.Brands{}.TableName()).
+	err := r.engine.Table(models.Brand{}.TableName()).
 		Where("id = ?", id).
 		Updates(updateData).
 		Error
@@ -54,8 +54,8 @@ func (r *BrandsRepository) DeleteBrands(id interface{}) error {
 }
 
 // 獲取所有的品牌
-func (r *BrandsRepository) GetAllBrands() ([]*models.Brands, error) {
-	var brands []*models.Brands
-	err := r.engine.Table(models.Brands{}.TableName()).Find(&brands).Error
-	return brands, err
+func (r *BrandRepository) GetAllBrand() ([]*models.Brand, error) {
+	var Brand []*models.Brand
+	err := r.engine.Table(models.Brand{}.TableName()).Find(&Brand).Error
+	return Brand, err
 }

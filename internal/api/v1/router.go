@@ -19,7 +19,7 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	carouselsController := controllers.NewCarouselsController(services.NewCarouselsService(engine))
 	productController := controllers.NewProductController(services.NewProductsService(engine))
 	certificatesController := controllers.NewCertificatesController(services.NewCertificatesService(engine))
-	brandsController := controllers.NewBrandsController(services.NewBrandsService(engine))
+	BrandController := controllers.NewBrandController(services.NewBrandService(engine))
 	categoryController := controllers.NewCategoryController(services.NewCategoryService(engine))
 
 	// TODO 文件上传 需要有一个专门的接口来处理文件上传
@@ -55,10 +55,14 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	// 獲取所有商品分類
 	categories.GET("/getAllCategories", categoryController.GetAllCategories)
 
-	// 定義brands分組
+	// 定義Brand分組
 	brands := r.Group("/v1/brands")
 	// 獲取所有brand
-	brands.GET("/getAllBrands", brandsController.GetAllBrands)
+	brands.GET("/getAllBrands", BrandController.GetAllBrand)
+
+	// 上傳logo
+	logos := r.Group("/v1/logos")
+	logos.POST("/uploadLogo", baseController.UploadLogo)
 
 	r.Use(middleware.JWTAuthMiddleware()) // 验证token ,从这里往下都需要验证token
 
@@ -70,12 +74,12 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	// 注册删除证书路由
 	certificates.DELETE("/deleteCertificate/:id", certificatesController.DeleteCertificate)
 
-	brands.GET("/", brandsController.GetBrandsByPage)
+	brands.GET("/", BrandController.GetBrandByPage)
 	// 注册添加证书路由
-	brands.POST("/addBrand", brandsController.AddBrands)
-	brands.PUT("/updateBrand", brandsController.UpdateBrands)
+	brands.POST("/addBrand", BrandController.AddBrand)
+	brands.PUT("/updateBrand", BrandController.UpdateBrand)
 	// 注册删除证书路由
-	brands.DELETE("/deleteBrand/:id", brandsController.DeleteBrands)
+	brands.DELETE("/deleteBrand/:id", BrandController.DeleteBrand)
 
 	// 獲取用戶信息
 	base.GET("/client/getRoles", userController.GetInfo)

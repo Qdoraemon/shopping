@@ -9,38 +9,38 @@ import (
 	"gorm.io/gorm"
 )
 
-type BrandsService struct {
-	brandsRepo *repositories.BrandsRepository
+type BrandService struct {
+	BrandRepo *repositories.BrandRepository
 }
 
-func NewBrandsService(engine *gorm.DB) *BrandsService {
-	return &BrandsService{brandsRepo: repositories.NewBrandsRepository(engine)}
+func NewBrandService(engine *gorm.DB) *BrandService {
+	return &BrandService{BrandRepo: repositories.NewBrandRepository(engine)}
 }
 
-func (bs *BrandsService) GetBrandsByPage(page, pageSize int) ([]*models.Brands, error) {
-	return bs.brandsRepo.GetBrandsByPage(page, pageSize)
+func (bs *BrandService) GetBrandByPage(page, pageSize int) ([]*models.Brand, error) {
+	return bs.BrandRepo.GetBrandByPage(page, pageSize)
 }
 
-func (bs *BrandsService) AddBrands(certificate *models.Brands) error {
-	if certificate == nil {
-		return errors.New("certificate cannot be nil")
+func (bs *BrandService) AddBrand(brand *models.Brand) error {
+	if brand == nil {
+		return errors.New("brand cannot be nil")
 	}
-	certificate.CreateTime = time.Now()
-	certificate.UpdateTime = time.Now()
-	return bs.brandsRepo.AddBrands(certificate)
+	brand.CreateTime = time.Now()
+	brand.UpdateTime = time.Now()
+	return bs.BrandRepo.AddBrand(brand)
 }
 
-// UpdateBrands 调用仓库层方法更新证书信息
-func (bs *BrandsService) UpdateBrands(certificate *models.Brands) error {
-	certificate.UpdateTime = time.Now()
-	return bs.brandsRepo.UpdateBrands(certificate)
+// UpdateBrand 调用仓库层方法更新证书信息
+func (bs *BrandService) UpdateBrand(brand *models.Brand) error {
+	brand.UpdateTime = time.Now()
+	return bs.BrandRepo.UpdateBrand(brand)
 }
 
-// DeleteBrands 调用仓库层方法标记证书为已删除
-func (bs *BrandsService) DeleteBrands(id interface{}) error {
-	return bs.brandsRepo.DeleteBrands(id)
+// DeleteBrand 调用仓库层方法标记证书为已删除
+func (bs *BrandService) DeleteBrand(id interface{}) error {
+	return bs.BrandRepo.DeleteBrand(id)
 }
 
-func (bs *BrandsService) GetAllBrands() ([]*models.Brands, error) {
-	return bs.brandsRepo.GetAllBrands()
+func (bs *BrandService) GetAllBrand() ([]*models.Brand, error) {
+	return bs.BrandRepo.GetAllBrand()
 }

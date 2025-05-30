@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"os"
+	"shopping/internal/services"
 	"shopping/internal/utils"
 
 	"github.com/gin-gonic/gin"
@@ -110,4 +111,22 @@ func (l *BaseController) DeleteImage(c *gin.Context) {
 	// 假设这里还会删除数据库中的记录
 
 	c.JSON(200, utils.Success(nil, "删除成功"))
+}
+
+func (l *BaseController) UploadLogo(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(200, utils.Error(400, "請選擇文件"))
+		return
+	}
+
+	// 調用 service 層處理上傳邏輯
+	path, err := services.SaveFile(file)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "保存失敗："+err.Error()))
+		return
+	}
+
+	c.JSON(200, utils.Success("上傳成功", path))
+
 }

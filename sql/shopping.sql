@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS `brands`;
 CREATE TABLE `brands`  (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '品牌名称',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '品牌描述',
+  `name_en` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '品牌英文名称',
   `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '品牌logo',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -58,8 +58,8 @@ CREATE TABLE `brands`  (
 -- ----------------------------
 -- Records of brands
 -- ----------------------------
-INSERT INTO `brands` VALUES (1, 'Apple', '蘋果', 'https://img.51miz.com/Element/00/81/29/18/21f4ca05_E812918_ede58726.png', '2025-04-25 22:54:03', '2025-04-25 22:54:06', 1, 1);
-INSERT INTO `brands` VALUES (2, 'DJI', '大疆', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593018435231.jfif', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
+INSERT INTO `brands` VALUES (1, '蘋果', 'Apple', 'https://img.51miz.com/Element/00/81/29/18/21f4ca05_E812918_ede58726.png', '2025-04-25 22:54:03', '2025-04-25 22:54:06', 1, 1);
+INSERT INTO `brands` VALUES (2,  '大疆','DJI', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593018435231.jfif', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
 
 DROP TABLE IF EXISTS `categories`;
 -- 创建 categories 表
@@ -76,8 +76,8 @@ CREATE TABLE categories (
 
 -- 插入数据到 categories 表
 INSERT INTO categories (id, name, name_en, description, update_time, create_time, is_deleted, is_enabled) VALUES
-(1, 'iPad', 'ipad', '', NOW(), NOW(), 0, 1),
-(2, 'iphone', 'iphone', '', NOW(), NOW(), 0, 1),
+(2, 'iPad', 'ipad', '', NOW(), NOW(), 0, 1),
+(1, 'iphone', 'iphone', '', NOW(), NOW(), 0, 1),
 (3, 'AirPods', 'airpods', '', NOW(), NOW(), 0, 1),
 (4, 'Apple Watch', 'watch', '', NOW(), NOW(), 0, 1),
 (5, 'MacBook', 'macbook', '', NOW(), NOW(), 0, 1),
@@ -203,7 +203,7 @@ INSERT INTO `product`  (`id`, `name`, `cover_image`, `detail_images`, `descripti
 , 1
 , '10.9英寸Liquid Retina顯示屏,A14仿生晶片,支持Apple Pencil（第1代）,支持Magic Keyboard Folio,1200萬像素後置攝像頭,USB-C接口,支持Wi-Fi 6,長達10小時的電池續航'
 , 'iPad 10配備了10.9英寸Liquid Retina顯示屏，顯示效果出色。內置A14仿生晶片，提供強大的性能和高效的能耗管理。支持Apple Pencil（第1代）和Magic Keyboard Folio，讓你在創作和工作中更加得心應手。擁有1200萬像素後置攝像頭，拍攝效果清晰。配備USB-C接口，支持Wi-Fi 6，連接更加快速穩定。電池續航時間長達10小時，滿足你一整天的使用需求。'
-, 1
+, 2
 , '2025-04-25 01:34:05'
 , '2025-04-25 01:34:08'
 , "1"
