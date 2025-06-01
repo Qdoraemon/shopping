@@ -18,7 +18,7 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	basicInformationController := controllers.NewBaseInfoController(services.NewBaseInfoService(engine))
 	carouselsController := controllers.NewCarouselsController(services.NewCarouselsService(engine))
 	productController := controllers.NewProductController(services.NewProductsService(engine))
-	certificatesController := controllers.NewCertificatesController(services.NewCertificatesService(engine))
+	// certificatesController := controllers.NewCertificatesController(services.NewCertificatesService(engine))
 	BrandController := controllers.NewBrandController(services.NewBrandService(engine))
 	categoryController := controllers.NewCategoryController(services.NewCategoryService(engine))
 
@@ -55,31 +55,28 @@ func RegisterApiRouter(r *gin.Engine, engine *gorm.DB) {
 	// 獲取所有商品分類
 	categories.GET("/getAllCategories", categoryController.GetAllCategories)
 
+	// 上傳logo
+	logos := r.Group("/v1/logos")
+	logos.POST("/uploadLogo", baseController.UploadLogo)
+
 	// 定義Brand分組
 	brands := r.Group("/v1/brands")
 	// 獲取所有brand
 	brands.GET("/getAllBrands", BrandController.GetAllBrand)
 
-	// 上傳logo
-	logos := r.Group("/v1/logos")
-	logos.POST("/uploadLogo", baseController.UploadLogo)
-
 	r.Use(middleware.JWTAuthMiddleware()) // 验证token ,从这里往下都需要验证token
 
-	certificates := r.Group("/v1/certificates")
-	certificates.GET("/page", certificatesController.GetCertificatesByPage)
-	// 注册添加证书路由
-	certificates.POST("/addCertificate", certificatesController.AddCertificate)
-	certificates.PUT("/updateCertificate", certificatesController.UpdateCertificate)
-	// 注册删除证书路由
-	certificates.DELETE("/deleteCertificate/:id", certificatesController.DeleteCertificate)
-
-	brands.GET("/", BrandController.GetBrandByPage)
-	// 注册添加证书路由
+	// brands操作
 	brands.POST("/addBrand", BrandController.AddBrand)
 	brands.PUT("/updateBrand", BrandController.UpdateBrand)
-	// 注册删除证书路由
 	brands.DELETE("/deleteBrand/:id", BrandController.DeleteBrand)
+	brands.POST("/getBrandsByPage", BrandController.GetBrandByPage)
+
+	// category操作
+	categories.POST("/addCategory", categoryController.AddCategory)
+	categories.PUT("/updateCategory", categoryController.UpdateCategory)
+	categories.DELETE("/deleteCategory/:id", categoryController.DeleteCategory)
+	categories.POST("/getCategoriesByPage", categoryController.GetCategoriesByPage)
 
 	// 獲取用戶信息
 	base.GET("/client/getRoles", userController.GetInfo)

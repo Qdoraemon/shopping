@@ -14,43 +14,77 @@ func NewBrandRepository(engine *gorm.DB) *BrandRepository {
 	return &BrandRepository{engine: engine}
 }
 
-// GetBrandByPage 分页查询未删除的证书
-func (r *BrandRepository) GetBrandByPage(page, pageSize int) ([]*models.Brand, error) {
-	var Brand []*models.Brand
-	err := r.engine.
-		Table(models.Brand{}.TableName()).
-		Where("is_deleted = 1").
-		Limit(pageSize).
-		Offset((page - 1) * pageSize).
-		Find(&Brand).Error
-	return Brand, err
-}
+// GetBrandByPage 分页查询的证书
+func (r *BrandRepository) GetBrandByPage(request models.SearchBrandsRequest) ([]*models.Brand, int64, error) {
+	// var Brand []*models.Brand
+	// err := r.engine.
+	// 	Table(models.Brand{}.TableName()).
+	// 	Limit(pageSize).
+	// 	Offset((page - 1) * pageSize).
+	// 	Find(&Brand).Error
+	// return Brand, err
+	var brands []*models.Brand
+	var total int64
 
-func (r *BrandRepository) AddBrand(certificate *models.Brand) error {
-	err := r.engine.Table(models.Brand{}.TableName()).Create(certificate).Error
-	return err
-}
+	// 初始化查询条件
+	query := r.engine.Model(&models.Brand{})
 
-// UpdateBrand 根据证书 ID 更新证书信息
-func (r *BrandRepository) UpdateBrand(certificate *models.Brand) error {
-	// 这里假设使用 ID 作为唯一标识进行更新
-	err := r.engine.Table(models.Brand{}.TableName()).
-		Where("id = ?", certificate.ID).
-		Updates(certificate).
-		Error
-	return err
-}
-
-// DeleteBrand 根据证书 ID 标记证书为已删除
-func (r *BrandRepository) DeleteBrand(id interface{}) error {
-	updateData := map[string]interface{}{
-		"is_deleted": 0,
+	// 根据名称进行模糊查询
+	if request.Name != "" {
+		query = query.Where("name LIKE ? OR name_en LIKE ?", "%"+request.Name+"%", "%"+request.Name+"%")
 	}
-	err := r.engine.Table(models.Brand{}.TableName()).
-		Where("id = ?", id).
-		Updates(updateData).
-		Error
+
+	// 根据状态筛选
+	if request.IsEnabled != "" {
+		query = query.Where("is_enabled = ?", request.IsEnabled)
+	}
+
+	// 获取总记录数
+	query.Count(&total)
+
+	// 分页查询
+	query = query.Offset((request.Page - 1) * request.PageSize).Limit(request.PageSize)
+
+	// 执行查询
+	err := query.Find(&brands).Error
+
+	if err != nil {
+		return nil, 0, err
+	}
+	return brands, total, nil
+}
+
+func (r *BrandRepository) AddBrand(brand *models.Brand) error {
+	err := r.engine.Table(models.Brand{}.TableName()).Create(brand).Error
 	return err
+}
+
+// UpdateBrand 根据ID 更新信息
+func (r *BrandRepository) UpdateBrand(brand *models.Brand) error {
+	// 这里假设使用 ID 作为唯一标识进行更新
+	// fmt.Println(brand.ID)
+	err := r.engine.Table(models.Brand{}.TableName()).
+		Save(brand).
+		Error
+
+	return err
+}
+
+// DeleteBrand 根据 ID 标记为已删除
+func (r *BrandRepository) DeleteBrand(id string) error {
+	// 开启事务
+	tx := r.engine.Begin()
+	// 删除选项数据
+	if err := tx.Where("id = ?", id).Delete(&models.Brand{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 提交事务
+	if err := tx.Commit().Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 // 獲取所有的品牌

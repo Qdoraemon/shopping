@@ -23,21 +23,19 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `base_information`;
 CREATE TABLE `base_information`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `home_title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '首页标题',
-  `home_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首页描述',
   `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '手机号码',
+  `whatsapp` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'WhatsApp号码',
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '邮箱地址',
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '地址',
   `wechat_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信图片地址',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
-  `is_enable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否启用 0：未启用 1：启用',
+  `facebook_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'Facebook图片地址',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of base_information
 -- ----------------------------
-INSERT INTO `base_information` VALUES (1, '測試用戶', NULL, '1234567890', '123@test.com', '我的測試地址', '@/assets/barcode.png', 0, 0);
+INSERT INTO `base_information` VALUES (1, '1234567890', '6999 9999', '123@test.com', '我的測試地址', '@/assets/barcode.png', '@/assets/barcode.png');
 
 -- ----------------------------
 -- Table structure for brands
@@ -47,7 +45,8 @@ CREATE TABLE `brands`  (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '品牌名称',
   `name_en` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '品牌英文名称',
-  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '品牌logo',
+  `description` varchar(255) COMMENT '品牌描述',
+  `website` varchar(255) COMMENT '品牌網站',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `is_deleted` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
@@ -58,36 +57,37 @@ CREATE TABLE `brands`  (
 -- ----------------------------
 -- Records of brands
 -- ----------------------------
-INSERT INTO `brands` VALUES (1, '蘋果', 'Apple', 'https://img.51miz.com/Element/00/81/29/18/21f4ca05_E812918_ede58726.png', '2025-04-25 22:54:03', '2025-04-25 22:54:06', 1, 1);
-INSERT INTO `brands` VALUES (2,  '大疆','DJI', 'http://127.0.0.1:8088/v1/getLatestImage?fileName=shopping_1745593018435231.jfif', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
+INSERT INTO `brands` VALUES (1, '蘋果', 'Apple', '苹果公司是美国的一家高科技公司', 'https://www.apple.com','2025-04-25 22:54:03', '2025-04-25 22:54:06', 0, 1);
+INSERT INTO `brands` VALUES (2,  '三星','Samsung', '三星电子是韩国最大的电子工业企业', 'https://www.samsung.com', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
+INSERT INTO `brands` VALUES (3,  '大疆','DJI', '大疆是中國有名的無人機公司', 'https://www.dji.com/', '2025-04-25 22:57:17', '2025-04-25 22:56:31', 0, 1);
 
 DROP TABLE IF EXISTS `categories`;
 -- 创建 categories 表
 CREATE TABLE categories (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL COMMENT '类型名称',
-    name_en VARCHAR(50) NOT NULL COMMENT '类型名称',
-    description VARCHAR(255) COMMENT '类型描述',
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    is_deleted TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
-    is_enabled TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用 0：未启用 1：启用'
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL COMMENT '类型名称',
+    `name_en` VARCHAR(50) NOT NULL COMMENT '类型名称',
+    `description` VARCHAR(255) COMMENT '类型描述',
+    `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否删除 0：删除 1：正常',
+    `is_enabled` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用 0：未启用 1：启用'
 );
 
 -- 插入数据到 categories 表
 INSERT INTO categories (id, name, name_en, description, update_time, create_time, is_deleted, is_enabled) VALUES
-(2, 'iPad', 'ipad', '', NOW(), NOW(), 0, 1),
-(1, 'iphone', 'iphone', '', NOW(), NOW(), 0, 1),
-(3, 'AirPods', 'airpods', '', NOW(), NOW(), 0, 1),
-(4, 'Apple Watch', 'watch', '', NOW(), NOW(), 0, 1),
-(5, 'MacBook', 'macbook', '', NOW(), NOW(), 0, 1),
-(6, '無人機', 'drones', '', NOW(), NOW(), 0, 1),
-(7, '手持穩定器', 'handheld gimbals', '', NOW(), NOW(), 0, 1),
-(8, '雲台相機', 'gimbal cameras', '', NOW(), NOW(), 0, 1),
-(9, '無人機配件', 'accessories', '', NOW(), NOW(), 0, 1),
-(10, '首飾', 'jewelry', '', NOW(), NOW(), 0, 1),
-(11, '銀飾系列', 'silver', '', NOW(), NOW(), 0, 1),
-(12, '寶石首飾', 'gemstone', '', NOW(), NOW(), 0, 1);
+(2, 'iPad', 'ipad', '', NOW(), NOW(), 1, 1),
+(1, 'iphone', 'iphone', '', NOW(), NOW(), 1, 1),
+(3, 'AirPods', 'airpods', '', NOW(), NOW(), 1, 1),
+(4, 'Apple Watch', 'watch', '', NOW(), NOW(), 1, 1),
+(5, 'MacBook', 'macbook', '', NOW(), NOW(), 1, 1),
+(6, '無人機', 'drones', '', NOW(), NOW(), 1, 1),
+(7, '手持穩定器', 'handheld gimbals', '', NOW(), NOW(), 1, 1),
+(8, '雲台相機', 'gimbal cameras', '', NOW(), NOW(), 1, 1),
+(9, '無人機配件', 'accessories', '', NOW(), NOW(), 1, 1),
+(10, '首飾', 'jewelry', '', NOW(), NOW(), 1, 1),
+(11, '銀飾系列', 'silver', '', NOW(), NOW(), 1, 1),
+(12, '寶石首飾', 'gemstone', '', NOW(), NOW(), 1, 1);
 
 -- ----------------------------
 -- Table structure for carousel
