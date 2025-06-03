@@ -65,6 +65,20 @@ var CategoryMap = map[int]string{
 	4: "智能手錶",
 }
 
+type SearchProductsRequest struct {
+	PageSize   int    `json:"pageSize"`
+	Page       int    `json:"page"`
+	Keyword    string `json:"keyword"`
+	Status     string `json:"status"`
+	CategoryID string `json:"categoryID"`
+	BrandID    string `json:"brandID"`
+}
+
+type SearchProductsResponse struct {
+	Products []*Product `json:"products"`
+	Total    int64      `json:"total"`
+}
+
 func (Product) TableName() string {
 	return "product"
 }

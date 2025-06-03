@@ -179,3 +179,21 @@ func (l *ProductController) GetProductsByName(c *gin.Context) {
 	c.JSON(200, utils.Success(result, "通過name成功獲取商品"))
 
 }
+
+// 根據頁數獲取數據
+func (l *ProductController) GetProductsByPage(c *gin.Context) {
+	var request models.SearchProductsRequest
+
+	err := c.ShouldBindJSON(&request)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "request格式傳入失敗"))
+		return
+	}
+
+	result, err := l.ProductService.GetProductsByPage(request)
+	if err != nil {
+		c.JSON(200, utils.Error(400, "獲取商品失敗"))
+	}
+
+	c.JSON(200, utils.Success(result, "獲取商品成功"))
+}

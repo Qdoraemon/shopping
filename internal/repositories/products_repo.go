@@ -316,3 +316,45 @@ func (r *ProductRepository) GetProductsByName(name string) ([]*models.Product, e
 	err := r.engine.Table(models.Product{}.TableName()).Where("name LIKE ?", "%"+name+"%").Find(&products).Error
 	return products, err
 }
+
+func (r *ProductRepository) GetProductByPage(request models.SearchProductsRequest) ([]*models.Product, int64, error) {
+	var products []*models.Product
+	var total int64
+
+	// 初始化查询条件
+	query := r.engine.Model(&models.Product{})
+
+	// 根据名称进行模糊查询
+	if request.Keyword != "" {
+		query = query.Where("name LIKE ", "%"+request.Keyword+"%")
+	}
+
+	// 根據分类ID筛选
+	if request.CategoryID != "" {
+		query = query.Where("categoryId =?", request.CategoryID)
+	}
+
+	// 根據品牌ID筛选
+	if request.BrandID != "" {
+		query = query.Where("brandId =?", request.BrandID)
+	}
+
+	// 根据状态筛选
+	if request.Status != "" {
+		query = query.Where("status = ?", request.Status)
+	}
+
+	// 获取总记录数
+	query.Count(&total)
+
+	// 分页查询
+	query = query.Offset((request.Page - 1) * request.PageSize).Limit(request.PageSize)
+
+	// 执行查询
+	err := query.Find(&products).Error
+
+	if err != nil {
+		return nil, 0, err
+	}
+	return products, total, nil
+}

@@ -293,3 +293,19 @@ func (s *ProductService) GetProductsByBrandID(id int) ([]*models.Product, error)
 func (s *ProductService) GetProductsByName(name string) ([]*models.Product, error) {
 	return s.productRepo.GetProductsByName(name)
 }
+
+// 根據頁數獲取商品
+func (s *ProductService) GetProductsByPage(request models.SearchProductsRequest) (models.SearchProductsResponse, error) {
+	products, total, err := s.productRepo.GetProductByPage(request)
+	if err != nil {
+		return models.SearchProductsResponse{
+			Products: nil,
+			Total:    0,
+		}, err
+	}
+
+	return models.SearchProductsResponse{
+		Products: products,
+		Total:    total,
+	}, nil
+}
